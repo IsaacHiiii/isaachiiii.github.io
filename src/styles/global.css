@@ -58,6 +58,83 @@ body {
   padding-bottom: 3rem;
 }
 
+/* ---------- ATGC background ----------
+   The grid of DNA letters behind the whole page (built in index.astro). */
+.atgc {
+  /* "fixed" pins it to the browser window, so it stays put while the page
+     scrolls over it. inset: 0 stretches it to all four edges of the window. */
+  position: fixed;
+  inset: 0;
+  /* z-index sets what's in front. -1 puts the letters behind all the page
+     content, but still in front of the page's background colour. */
+  z-index: -1;
+  overflow: hidden; /* cut off letters that don't fit in the window */
+  pointer-events: none; /* clicks pass straight through to the page */
+  user-select: none; /* the letters can't be selected or copied */
+
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.35em;
+  white-space: pre; /* keep each row on one line, break only at the \n */
+  color: var(--text);
+  opacity: 0.16;
+
+  /* A mask decides how much of the element shows through: black = fully
+     visible, transparent = hidden. This radial gradient is an oval
+     (75% of the window wide, 70% tall) that is only 18% visible in the middle,
+     60% at 45% of the way out, and fully visible from 80% out, so the letters
+     are faint behind the text and clearer near the edges.
+     -webkit-mask-image is the same thing for older Safari versions. */
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.6) 45%, #000 80%);
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.6) 45%, #000 80%);
+}
+/* The inner layer cuts the letters into random soft patches. --patches is
+   the list of cloud gradients made in index.astro. Several mask images are
+   added together, so letters show wherever any cloud is. Because this layer
+   sits inside .atgc, both masks apply: a cloud in the middle is still faint. */
+.atgc-patches {
+  height: 100%;
+  -webkit-mask-image: var(--patches);
+  mask-image: var(--patches);
+}
+/* The grid doesn't move, so it stays on with reduce motion turned on.
+   Only the glitches on top of it stop. */
+
+/* ---------- Background glitches ----------
+   The layer the script (src/scripts/atgc-glitches.js) puts glitches into.
+   Same position and letter sizes as the grid, so glitches line up with it.
+   It comes after .atgc in the HTML, so with the same z-index it sits on top. */
+.atgc-glitches {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.35em;
+  white-space: pre;
+  /* The same patch mask as the letters, so a glitch fades out at a patch's edge. */
+  -webkit-mask-image: var(--patches);
+  mask-image: var(--patches);
+}
+/* A small glitch: white letters on black. "absolute" places it at the exact
+   left and top the script gives it, inside the layer. */
+.glitch {
+  position: absolute;
+  background: var(--surface);
+  color: var(--text);
+  opacity: 0.9;
+}
+/* A streak: a longer, dimmer grey run of letters. */
+.glitch.streak {
+  color: var(--heading-grey);
+  opacity: 0.55;
+}
+
 /* Visible outline when someone moves through the page with the Tab key. */
 a:focus-visible {
   outline: 2px solid var(--text);
@@ -147,8 +224,8 @@ a:focus-visible {
   padding: 1rem 1rem 0;
 }
 .hero {
-  /* No box around the hero: it sits straight on the page background.
-     (Phase 2 puts the ATGC letters behind the whole page.) */
+  /* No box around the hero: it sits straight on the page background,
+     with the ATGC letters showing through from behind. */
   position: relative;
   max-width: 1180px;
   margin: 0 auto;
@@ -166,8 +243,8 @@ a:focus-visible {
 .prompt-pill {
   margin: 0;
   display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: center; /* centre the text and the cursor on the same line */
+  gap: 1ch; /* exactly one character's space between "whoami" and the cursor */
   padding: 0.45rem 0.9rem;
   border: 1px solid var(--border);
   border-radius: 999px; /* a huge radius makes a fully rounded "pill" */
@@ -176,12 +253,27 @@ a:focus-visible {
   font-size: 0.85rem;
   color: var(--muted);
 }
-/* The block cursor. It's still for now; Phase 2 makes it blink. */
+/* The block cursor in the prompt pill. It blinks: one full on-and-off cycle
+   every 1.1s. steps(1) makes it switch on and off sharply, like a real
+   terminal cursor, instead of fading. */
 .cursor {
   display: inline-block;
-  width: 0.55em;
-  height: 1em;
-  background: var(--muted);
+  width: 1ch; /* "ch" = the width of one character, so it fills one letter slot */
+  /* A full character cell: from above the capitals to below letters like
+     "g", the way a block cursor looks in a real terminal. */
+  height: 1.2em;
+  background: currentColor; /* the same colour as the prompt text */
+  animation: cursor-blink 1.1s steps(1) infinite;
+}
+@keyframes cursor-blink {
+  0% { opacity: 1; } /* on for the first half... */
+  50% { opacity: 0; } /* ...off for the second half */
+}
+/* With reduce motion on, the cursor stays on and doesn't blink. */
+@media (prefers-reduced-motion: reduce) {
+  .cursor {
+    animation: none;
+  }
 }
 .hero h1 {
   margin: 0;
@@ -192,6 +284,74 @@ a:focus-visible {
   line-height: 1.02;
   letter-spacing: -0.04em;
 }
+/* ---------- Name glitch ----------
+   Every 6.5s the first line of the heading glitches for about 0.2s:
+   a white and a grey copy of the name flash in thin horizontal slices,
+   shifted sideways over three quick steps. */
+
+/* inline-block gives the name its own box, so the copies on top of it
+   (position: absolute; inset: 0) are exactly the same size and wrap the
+   same way if the name ever breaks onto two lines. */
+.gname {
+  position: relative;
+  display: inline-block;
+}
+.gname-glitch,
+.gname-glitch::before,
+.gname-glitch::after {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* ::before and ::after are "pseudo-elements": extra boxes CSS can add to an
+   element without new HTML. content: attr(data-text) fills each one with
+   the text of the element's data-text attribute, here the name. */
+.gname-glitch::before,
+.gname-glitch::after {
+  content: attr(data-text);
+  background: var(--surface); /* each copy sits on black, hiding the real name under it */
+  opacity: 0; /* invisible except during the glitch */
+}
+/* The animation line reads: name, one cycle of 6.5s, steps(1), a 1.2s delay
+   before the first glitch, and repeat forever ("infinite").
+   steps(1) jumps from one keyframe to the next instead of sliding,
+   which is what makes it look like a glitch.
+   (The name must be in the same line: without it, the build shrinks the
+   line to "animation: none" and the glitch never runs.) */
+.gname-glitch::before {
+  color: var(--text); /* the white copy */
+  animation: name-glitch-white 6.5s steps(1) 1.2s infinite;
+}
+.gname-glitch::after {
+  color: var(--heading-grey); /* the grey copy */
+  animation: name-glitch-grey 6.5s steps(1) 1.2s infinite;
+}
+
+/* @keyframes lists what the animation looks like at points in the cycle.
+   1% of 6.5s is 65ms, so 0%, 1% and 2% are the three quick steps, and at
+   3% (about 0.2s in) the copies disappear until the next cycle.
+   clip-path: inset(top right bottom left) cuts away everything except a
+   thin horizontal slice; translateX moves the slice sideways. */
+@keyframes name-glitch-white {
+  0% { opacity: 1; clip-path: inset(12% 0 70% 0); transform: translateX(-7px); }
+  1% { opacity: 1; clip-path: inset(55% 0 28% 0); transform: translateX(5px); }
+  2% { opacity: 1; clip-path: inset(32% 0 55% 0); transform: translateX(-3px); }
+  3%, 100% { opacity: 0; }
+}
+@keyframes name-glitch-grey {
+  0% { opacity: 1; clip-path: inset(62% 0 18% 0); transform: translateX(6px); }
+  1% { opacity: 1; clip-path: inset(20% 0 66% 0); transform: translateX(-5px); }
+  2% { opacity: 1; clip-path: inset(78% 0 6% 0); transform: translateX(2px); }
+  3%, 100% { opacity: 0; }
+}
+
+/* With reduce motion on, remove the glitch layer completely. */
+@media (prefers-reduced-motion: reduce) {
+  .gname-glitch {
+    display: none;
+  }
+}
+
 .hero-intro {
   margin: 0;
   font-size: 1.15rem;

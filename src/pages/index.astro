@@ -20,6 +20,40 @@ import content from '../content.json';
 
 // Pull each part out of content into its own short name.
 const { site, links, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
+
+// ATGC background: build the grid of random DNA letters once, at build time.
+// Because this runs in the frontmatter, the letters are already written into
+// the HTML file. The visitor's browser runs no script to make them.
+// 80 rows of 200 letters is enough to fill a large 2560 × 1600 screen. On
+// smaller screens the extra letters are just cut off (see .atgc in global.css).
+// Array.from({ length: n }, fn) makes a list of n items by calling fn n times.
+const atgcRows = Array.from({ length: 80 }, () =>
+	Array.from({ length: 200 }, () => 'ACGT'[Math.floor(Math.random() * 4)]).join('')
+);
+// Join the rows with line breaks into one block of text.
+const atgcGrid = atgcRows.join('\n');
+
+// Random patches: the letters only show in a few soft "clouds" and fade to
+// nothing between them. Each cloud is a radial gradient (solid in the middle,
+// fading to transparent at its edge) at a random place, also picked at build
+// time. Stacked together they make a mask: letters show only inside a cloud.
+// Percentages are of the window's size, so the clouds scale with the window.
+const rand = (min, max) => Math.round(min + Math.random() * (max - min));
+// Each patch is { x, y, w, h }: its centre (x across, y down) and its
+// half-width and half-height, all as percentages of the window.
+const atgcPatches = Array.from({ length: 8 }, () => ({
+	x: rand(0, 100),
+	y: rand(0, 100),
+	w: rand(15, 30),
+	h: rand(20, 35),
+}));
+// Turn each patch into a CSS gradient, and write the list as a CSS variable
+// (--patches) on the elements, so global.css can use it as a mask.
+const atgcPatchStyle =
+	'--patches: ' +
+	atgcPatches
+		.map((p) => `radial-gradient(ellipse ${p.w}% ${p.h}% at ${p.x}% ${p.y}%, #000 0%, rgba(0, 0, 0, 0.6) 40%, transparent 100%)`)
+		.join(', ');
 ---
 
 <html lang="en">
@@ -33,6 +67,33 @@ const { site, links, nav, hero, about, experience, research, hackathons, learnin
 		<meta name="description" content={site.description} />
 	</head>
 	<body>
+		<!--
+			===== ATGC background =====
+			The grid of DNA letters behind the whole page. It's decoration, so
+			aria-hidden="true" tells screen readers to skip it completely.
+			Otherwise VoiceOver would read out 16,000 letters.
+			Two layers, each with its own mask: the outer one keeps the middle of
+			the window faint, the inner one cuts the letters into random patches.
+		-->
+		<div class="atgc" aria-hidden="true">
+			<div class="atgc-patches" style={atgcPatchStyle}>{atgcGrid}</div>
+		</div>
+		<!--
+			Background glitches: an empty layer on top of the grid. The script in
+			src/scripts/atgc-glitches.js fills it with short-lived glitches.
+			It gets the same patch mask, plus the patch list as data-patches
+			(a data-* attribute is a place to hand values from HTML to a script),
+			so the script can put glitches inside the patches.
+		-->
+		<div class="atgc-glitches" aria-hidden="true" style={atgcPatchStyle} data-patches={JSON.stringify(atgcPatches)}></div>
+		<!--
+			Astro bundles a <script> like this one and loads it in the browser.
+			This is the only script on the page.
+		-->
+		<script>
+			import '../scripts/atgc-glitches.js';
+		</script>
+
 		<!-- ===== Navigation bar ===== -->
 		<header class="nav">
 			<div class="nav-bar">
@@ -58,13 +119,19 @@ const { site, links, nav, hero, about, experience, research, hackathons, learnin
 		<!-- ===== Hero ===== -->
 		<div class="hero-wrap">
 			<section id="top" class="hero">
-				<!-- Phase 2 adds the ATGC letter background here. -->
 				<div class="hero-content">
 					<p class="prompt-pill">
 						{hero.prompt}<span class="cursor" aria-hidden="true"></span>
 					</p>
+					<!--
+						Name glitch: .gname wraps the real name, which screen readers read.
+						.gname-glitch is an empty layer on top of it. Its ::before and
+						::after (see global.css) draw two copies of the name, copied from
+						data-text, that flash during the glitch. aria-hidden="true" hides
+						the layer and its copies, so VoiceOver reads the name only once.
+					-->
 					<h1>
-						{hero.name}<br /><span class="grey">{hero.tagline}</span>
+						<span class="gname">{hero.name}<span class="gname-glitch" aria-hidden="true" data-text={hero.name}></span></span><br /><span class="grey">{hero.tagline}</span>
 					</h1>
 					<p class="hero-intro">{hero.intro}</p>
 					<div class="button-row">

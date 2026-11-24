@@ -29,12 +29,26 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **Small details decide whether a design feels right.** Letter spacing, line length and alignment all mattered. Lining the boxes up with the nav bar, and the headings with the text inside them, made the page feel calm.
 - **When a style doesn't apply, find out why.** Two CSS rules were competing, and the later one won. Fixing it taught me how the cascade and specificity decide which rule applies.
 - **Try it, then decide.** Some ideas only showed they didn't fit once I saw them on the page. Because the text lives in one file, trying something and undoing it cost very little. Screenshots with a clear "this looks off because…" got the best results from the agent.
+
+### Phase 2: animations
+
+- **Decide where the work happens.** The letter grid is made once when the site is built, so visitors download finished HTML. Only the glitches, which really do change over time, need a script in the browser.
+- **The spec can change when the result says so.** A grid filling the whole screen felt too heavy once I saw it, so I switched to random patches. I updated the PRD as well, so the plan still describes what the site actually does.
+- **Motion is optional, and that's a design choice too.** Every effect checks the "reduce motion" setting. The background stays visible, because it doesn't move, while anything that flickers switches off.
+- **What looks right on screen isn't always what a screen reader hears.** The glitch copies of my name are hidden from screen readers, so VoiceOver reads my name once, not three times.
+- **The dev server isn't the live site.** One animation worked in development but was silently removed when the site was built for production. Testing the real build caught it before it went live.
+
 ## How it's built
 
 - [Astro](https://astro.build) builds the site into plain HTML
 - Plain CSS in one stylesheet, `src/styles/global.css`, with the colours set once as design tokens. A separate set of rules handles phones
 - Geist and Geist Mono fonts, bundled with the site rather than loaded from Google
 - All the text lives in one file, `src/content.json`, so I can edit it without touching the layout
+- Animations:
+  - The background of A, C, G and T letters, shown in random patches, is generated when the site is built.
+  - The name glitch and the blinking cursor are plain CSS.
+  - One small script, `src/scripts/atgc-glitches.js`, adds the flickering background glitches.
+  - All the motion switches off when a visitor has "reduce motion" turned on.
 - Hosted on GitHub Pages, and every push to `main` goes live automatically
 
 ## Running it locally
