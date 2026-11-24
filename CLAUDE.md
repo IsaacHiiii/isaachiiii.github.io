@@ -27,4 +27,8 @@ I'm learning to build with an AI coding agent. This is my first real project, so
 ## Keep the README up to date
 
 - At the end of every phase, update `README.md` so it matches what the project actually does (how it's built, how to run it).
-- Remind me to add to the "What I learned" section. If I ask, draft it in my voice from the questions I asked during the session, and I'll review it.
+- At the end of every phase, also write that phase's entry in the "What I learned" section, without waiting to be asked. Then tell me so I can review it.
+  - Base it on what I asked, struggled with and decided during the session.
+  - Write it in my voice, and make it read as mature: show how I think and what I now understand, not a list of every small thing I looked up.
+  - Don't reveal too much: no personal details, no setup trivia, and no beginner basics that make it read like a diary.
+  - Keep it to about 4 to 5 short, clear points under a "### Phase N: <name>" heading.
