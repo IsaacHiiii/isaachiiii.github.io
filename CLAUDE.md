@@ -27,4 +27,4 @@ I'm learning to build with an AI coding agent. This is my first real project, so
 ## Keep the README up to date
 
 - At the end of every phase, update `README.md` so it matches what the project actually does (how it's built, how to run it).
-- Remind me to add a line to the "What I learned" section. Don't write that part for me.
+- Remind me to add to the "What I learned" section. If I ask, draft it in my voice from the questions I asked during the session, and I'll review it.
