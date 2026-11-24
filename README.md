@@ -29,8 +29,6 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **Small details decide whether a design feels right.** Letter spacing, line length and alignment all mattered. Lining the boxes up with the nav bar, and the headings with the text inside them, made the page feel calm.
 - **When a style doesn't apply, find out why.** Two CSS rules were competing, and the later one won. Fixing it taught me how the cascade and specificity decide which rule applies.
 - **Try it, then decide.** Some ideas only showed they didn't fit once I saw them on the page. Because the text lives in one file, trying something and undoing it cost very little. Screenshots with a clear "this looks off because…" got the best results from the agent.
-- **Curate, don't list everything.** The site shows a few roles, with current ones first. The full history stays in my CV.
-
 ## How it's built
 
 - [Astro](https://astro.build) builds the site into plain HTML
