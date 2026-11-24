@@ -281,9 +281,6 @@ a:focus-visible {
   margin: 0;
   color: var(--muted);
   line-height: 1.7;
-  /* Stop lines getting too long to read comfortably in the wide boxes.
-     "ch" = the width of one character, so about 75 characters per line. */
-  max-width: 75ch;
 }
 .entry-detail a {
   color: var(--text);
@@ -294,7 +291,6 @@ a:focus-visible {
   margin: 0;
   color: var(--text-2);
   line-height: 1.75;
-  max-width: 75ch; /* same reading limit as above */
 }
 .facts {
   /* A grid that fits as many 14rem-wide columns as there's room for:
@@ -556,5 +552,44 @@ a:focus-visible {
   /* Everything else goes in column 2. */
   .entry > :not(.mono-label) {
     grid-column: 2;
+  }
+}
+
+
+/* ---------- 9. About: paragraph and facts ---------- */
+/* Paragraph, then a divider, then the facts underneath.
+   The facts sit in a row on laptops, and stack on phones. */
+.about-row {
+  gap: 1.25rem;
+}
+.about-row .facts {
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--divider);
+}
+/* On laptops: each fact is only as wide as its text, and the leftover
+   space is shared out equally between them ("space-between"), so the gaps
+   look even and the last fact ends at the right edge. If they don't fit on
+   one line (a narrow window), they wrap onto a second line. */
+@media (min-width: 641px) {
+  .about-row .facts {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem 2.5rem;
+  }
+}
+
+/* ---------- 10. Footer signature ---------- */
+/* The two mono lines on the right, stacked and right-aligned on laptops. */
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: right;
+}
+/* On phones the footer wraps, so line everything up on the left instead. */
+@media (max-width: 640px) {
+  .footer-right {
+    text-align: left;
   }
 }

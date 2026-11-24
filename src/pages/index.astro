@@ -89,11 +89,10 @@ const { site, links, nav, hero, about, experience, research, hackathons, learnin
 			<section class="section" aria-labelledby="about-h">
 				<h2 id="about-h">{about.heading}</h2>
 				<div class="card">
-					<div class="row">
+					<!-- One row: the paragraph, then the facts underneath it. -->
+					<div class="row about-row">
 						<p class="about-text">{about.paragraph}</p>
-					</div>
-					<!-- <dl> is a "description list": pairs of a label (<dt>) and a value (<dd>). -->
-					<div class="row">
+						<!-- <dl> is a "description list": pairs of a label (<dt>) and a value (<dd>). -->
 						<dl class="facts">
 							{about.facts.map((fact) => (
 								<div>
@@ -199,7 +198,11 @@ const { site, links, nav, hero, about, experience, research, hackathons, learnin
 			<!-- ===== Footer ===== -->
 			<footer class="footer">
 				<p>{footer.left}</p>
-				<p class="mono">{footer.right}</p>
+				<!-- Right side: my first line of Python as a quiet signature, then the mono line. -->
+				<div class="footer-right">
+					<p class="mono">{footer.firstCode}</p>
+					<p class="mono">{footer.right}</p>
+				</div>
 			</footer>
 		</main>
 	</body>

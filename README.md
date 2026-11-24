@@ -26,10 +26,10 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 ### Phase 1: building the layout
 
 - **Check every screen size, not just mine.** A layout that looks right on a laptop can feel cramped on a phone. I used media queries to give each its own spacing and type sizes.
-- **Small details decide whether a design feels right.** Tight letter spacing suits big headings but crowds small ones, and lines longer than about 75 characters are tiring to read.
-- **Alignment makes a page feel calm.** I lined headings up with the text in their boxes and matched the boxes to the nav bar, so the edges run straight down the page.
+- **Small details decide whether a design feels right.** Letter spacing, line length and alignment all mattered. Lining the boxes up with the nav bar, and the headings with the text inside them, made the page feel calm.
 - **When a style doesn't apply, find out why.** Two CSS rules were competing, and the later one won. Fixing it taught me how the cascade and specificity decide which rule applies.
-- **Give specific feedback.** Screenshots with a clear "this looks off because…" got better results from the agent than general requests.
+- **Try it, then decide.** Some ideas only showed they didn't fit once I saw them on the page. Because the text lives in one file, trying something and undoing it cost very little. Screenshots with a clear "this looks off because…" got the best results from the agent.
+- **Curate, don't list everything.** The site shows a few roles, with current ones first. The full history stays in my CV.
 
 ## How it's built
 
