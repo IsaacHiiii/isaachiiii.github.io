@@ -17,3 +17,14 @@ I'm learning to build with an AI coding agent. This is my first real project, so
 - Plain CSS with the design tokens from PRD section 6. No Tailwind, no animation libraries.
 - Every animation must switch off when "reduce motion" is turned on.
 - Don't make up content. If something is missing, leave it out and tell me.
+
+## Explain the code inside the code
+
+- Comment the code you write so I can learn from reading it. Say what each block does and why, in plain English, for a beginner.
+- Comment blocks and anything non-obvious, not every single line. Explain new concepts (e.g. "a CSS variable is a named value you can reuse") the first time they appear.
+- Keep comments correct: when you change code, update its comments too.
+
+## Keep the README up to date
+
+- At the end of every phase, update `README.md` so it matches what the project actually does (how it's built, how to run it).
+- Remind me to add a line to the "What I learned" section. Don't write that part for me.

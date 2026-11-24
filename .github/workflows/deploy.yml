@@ -1,32 +1,44 @@
-# Builds the site and publishes it to GitHub Pages on every push to main.
-name: Deploy to GitHub Pages
+# This is a GitHub Actions "workflow": a list of steps GitHub runs for you
+# on its own computers. This one builds the site and publishes it to
+# GitHub Pages, so every push goes live without you doing anything.
+# GitHub finds it automatically because it's in .github/workflows/.
 
+name: Deploy to GitHub Pages # the name shown in the repo's Actions tab
+
+# "on" = when to run.
 on:
   push:
-    branches: [main]
-  workflow_dispatch: # lets you run it by hand from the Actions tab
+    branches: [main] # every time you push to the main branch
+  workflow_dispatch: # also adds a "Run workflow" button in the Actions tab
 
+# What the workflow is allowed to do. It only gets what it needs:
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read # read the code in the repo
+  pages: write # publish to GitHub Pages
+  id-token: write # prove to GitHub Pages that it really is this repo
 
+# A workflow is made of "jobs". Here there are two: build, then deploy.
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest # run on a fresh Linux machine GitHub provides
     steps:
+      # Download a copy of the repo onto that machine.
       - name: Get the code
         uses: actions/checkout@v5
+
+      # Astro's official action: installs the tools (npm install),
+      # runs npm run build, and packages the dist/ folder for Pages.
       - name: Build with Astro
         uses: withastro/action@v5
 
   deploy:
-    needs: build
+    needs: build # wait for the build job to succeed first
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }} # shows the live link in GitHub
     steps:
+      # Take the packaged site from the build job and put it online.
       - name: Publish to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
