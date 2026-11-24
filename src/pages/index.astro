@@ -1,48 +1,206 @@
 ---
 // The area between the two "---" lines is the "frontmatter".
 // Code here runs once, when Astro builds the site, not in the visitor's browser.
-// It's empty for now. In Phase 1 this is where we'll load src/content.json.
+
+// Load the fonts. Fontsource ships the font files with the site, so visitors
+// don't download them from Google. One import per weight we use.
+import '@fontsource/geist/400.css';
+import '@fontsource/geist/500.css';
+import '@fontsource/geist/600.css';
+import '@fontsource/geist/700.css';
+import '@fontsource/geist-mono/400.css';
+import '@fontsource/geist-mono/500.css';
+
+// Load all the site's styles.
+import '../styles/global.css';
+
+// Load all the text. "content" is now an object, so content.hero.name
+// gives "Isaac Hii Nian Hong." from src/content.json.
+import content from '../content.json';
+
+// Pull each part out of content into its own short name.
+const { site, links, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
 ---
 
-<!--
-  Everything below is the page itself, written as HTML.
-  Because this file is at src/pages/index.astro, Astro turns it into the
-  home page (index.html) of the site.
-  This is a Phase 0 placeholder. Phase 1 replaces it with the real design.
--->
 <html lang="en">
-	<!-- lang="en" tells browsers and screen readers the page is in English. -->
 	<head>
-		<!-- The <head> holds information about the page. None of it shows on screen. -->
-
-		<!-- Use the UTF-8 character set, so every letter and symbol displays correctly. -->
 		<meta charset="utf-8" />
-
-		<!-- The small icon in the browser tab. The files live in public/. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
-
-		<!-- On phones, fit the page to the screen width instead of zooming out. -->
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-
-		<!-- The text in the browser tab and in search results. -->
-		<title>Isaac Hii Nian Hong</title>
-
-		<style>
-			/* CSS: the rules that control how the page looks. */
-			body {
-				margin: 0; /* remove the browser's default gap around the page */
-				min-height: 100vh; /* at least as tall as the screen (vh = viewport height) */
-				display: grid; /* lay out the content with CSS grid... */
-				place-items: center; /* ...so it can be centred both ways */
-				background: #0d0d0d; /* near-black, same as --bg in the PRD */
-				color: #ededed; /* off-white text, same as --text in the PRD */
-				font-family: ui-monospace, Menlo, monospace; /* a terminal-style font */
-			}
-		</style>
+		<!-- Curly braces { } insert a value from the frontmatter into the HTML. -->
+		<title>{site.title}</title>
+		<meta name="description" content={site.description} />
 	</head>
 	<body>
-		<!-- The <body> is what visitors actually see. -->
-		<p>~/isaac-hii $ whoami · coming soon</p>
+		<!-- ===== Navigation bar ===== -->
+		<header class="nav">
+			<div class="nav-bar">
+				<a href="#top" class="nav-logo">{site.logo}</a>
+				<nav aria-label="Main" class="nav-links">
+					<!--
+						nav.map(...) loops over the list of links in content.json
+						and makes one <a> for each, so adding a link there adds it here.
+					-->
+					{nav.map((item) => (
+						<a href={item.href} class="nav-link">{item.label}</a>
+					))}
+					<a href={links.github} class="btn btn-outline">GitHub</a>
+					<a href="#contact" class="btn btn-solid">
+						Get in touch
+						<!-- The small ↗ arrow. aria-hidden hides it from screen readers, since it's decoration. -->
+						<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+					</a>
+				</nav>
+			</div>
+		</header>
+
+		<!-- ===== Hero ===== -->
+		<div class="hero-wrap">
+			<section id="top" class="hero">
+				<!-- Phase 2 adds the ATGC letter background here. -->
+				<div class="hero-content">
+					<p class="prompt-pill">
+						{hero.prompt}<span class="cursor" aria-hidden="true"></span>
+					</p>
+					<h1>
+						{hero.name}<br /><span class="grey">{hero.tagline}</span>
+					</h1>
+					<p class="hero-intro">{hero.intro}</p>
+					<div class="button-row">
+						<!-- The CV link points to #contact until the PDF is added in Phase 5. -->
+						<a href={links.cv} class="btn btn-solid">
+							Download CV
+							<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+						</a>
+						<a href={links.linkedin} class="btn btn-outline">
+							LinkedIn
+							<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+						</a>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<!-- <main> marks the page's main content, which helps screen readers. -->
+		<main class="main">
+			<!-- ===== A bit about me ===== -->
+			<!-- aria-labelledby links the section to its heading, so screen readers can name it. -->
+			<section class="section" aria-labelledby="about-h">
+				<h2 id="about-h">{about.heading}</h2>
+				<div class="card">
+					<div class="row">
+						<p class="about-text">{about.paragraph}</p>
+					</div>
+					<!-- <dl> is a "description list": pairs of a label (<dt>) and a value (<dd>). -->
+					<div class="row">
+						<dl class="facts">
+							{about.facts.map((fact) => (
+								<div>
+									<dt class="mono-label">{fact.label}</dt>
+									<dd>{fact.value}</dd>
+								</div>
+							))}
+						</dl>
+					</div>
+				</div>
+			</section>
+
+			<!-- ===== Experience ===== -->
+			<section id="experience" class="section" aria-labelledby="exp-h">
+				<h2 id="exp-h">{experience.heading}<br /><span class="grey">{experience.subheading}</span></h2>
+				<!-- <ol> is an ordered list, one <li> per role. -->
+				<ol class="card">
+					{experience.entries.map((entry) => (
+						<li class="row entry">
+							<p class="mono-label">{entry.when}</p>
+							<h3 class="entry-title">{entry.title}</h3>
+							<p class="entry-detail">{entry.detail}</p>
+						</li>
+					))}
+				</ol>
+			</section>
+
+			<!-- ===== Research and skills ===== -->
+			<section id="research" class="section" aria-labelledby="res-h">
+				<h2 id="res-h">{research.heading}</h2>
+				<div class="card">
+					<div class="row entry">
+						<p class="mono-label">{research.poster.label}</p>
+						<h3 class="entry-title">{research.poster.title}</h3>
+						<p class="entry-detail">{research.poster.venue}</p>
+					</div>
+					<div class="row terminal">
+						<p class="mono-label">{research.skillsPrompt}</p>
+						{research.skills.map((skill) => (
+							<p class="term-line"><span class="key">{skill.label}</span><span>{skill.value}</span></p>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<!-- ===== Hackathons ===== -->
+			<section id="hackathons" class="section" aria-labelledby="hack-h">
+				<h2 id="hack-h">{hackathons.heading}<br /><span class="grey">{hackathons.subheading}</span></h2>
+				<div class="card">
+					{hackathons.entries.map((entry) => (
+						<div class="row">
+							<p class="mono-label">{entry.path}</p>
+							<h3 class="entry-title">{entry.title}</h3>
+							<p class="entry-detail">{entry.text}</p>
+						</div>
+					))}
+					<!-- The "next" row is dimmer, and "hear from you" links to the contact card. -->
+					<div class="row">
+						<p class="mono-label faint">{hackathons.next.path}</p>
+						<p class="entry-detail">
+							{hackathons.next.textBefore}<a href="#contact">{hackathons.next.linkText}</a>{hackathons.next.textAfter}
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- ===== Learning data science ===== -->
+			<section id="learning" class="section" aria-labelledby="learn-h">
+				<h2 id="learn-h">{learning.heading}<br /><span class="grey">{learning.subheading}</span></h2>
+				<div class="card log">
+					<p class="mono-label log-header">{learning.prompt}</p>
+					<div class="terminal">
+						<!--
+							Each log line gets a tag like [now] or [done].
+							"now" tags are white; whole "done" lines are grey.
+						-->
+						{learning.log.map((line) => (
+							<p class={line.tag === 'done' ? 'term-line line-done' : 'term-line'}>
+								<span class={`key tag-${line.tag}`}>[{line.tag}]</span><span>{line.text}</span>
+							</p>
+						))}
+					</div>
+				</div>
+			</section>
+
+			<!-- ===== Contact ===== -->
+			<section id="contact" class="contact" aria-labelledby="contact-h">
+				<h2 id="contact-h">{contact.heading}<br /><span class="grey">{contact.subheading}</span></h2>
+				<p class="contact-text">{contact.text}</p>
+				<div class="button-row">
+					<!-- Phase 5 adds the script that fills in the hidden email address. -->
+					<a href="#contact" class="btn btn-solid" id="email-button">
+						Email me
+						<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+					</a>
+					<a href={links.linkedin} class="btn btn-outline">
+						LinkedIn
+						<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+					</a>
+				</div>
+			</section>
+
+			<!-- ===== Footer ===== -->
+			<footer class="footer">
+				<p>{footer.left}</p>
+				<p class="mono">{footer.right}</p>
+			</footer>
+		</main>
 	</body>
 </html>

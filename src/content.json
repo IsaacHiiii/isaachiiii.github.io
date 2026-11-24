@@ -1,0 +1,111 @@
+{
+  "site": {
+    "title": "Isaac Hii Nian Hong",
+    "description": "Biomedical sciences student at NUMed, learning data science and joining hackathons.",
+    "logo": "isaac.hii"
+  },
+  "links": {
+    "linkedin": "https://www.linkedin.com/in/isaachiinh",
+    "github": "https://github.com/IsaacHiiii",
+    "cv": "#contact"
+  },
+  "nav": [
+    { "label": "Experience", "href": "#experience" },
+    { "label": "Research", "href": "#research" },
+    { "label": "Hackathons", "href": "#hackathons" },
+    { "label": "Learning", "href": "#learning" }
+  ],
+  "hero": {
+    "prompt": "~/isaac-hii $ whoami",
+    "name": "Isaac Hii Nian Hong",
+    "tagline": "Biohacker in the making.",
+    "intro": "I'm a biomedical sciences student at NUMed, slowly teaching myself data science and joining hackathons when I can."
+  },
+  "about": {
+    "heading": "A bit about me.",
+    "paragraph": "I'm in my second year of Biomedical Sciences at Newcastle University Medicine Malaysia, based in Johor Bahru. I enjoy lab work, and I've been getting curious about what happens to the data afterwards. That's what pulled me towards bioinformatics and data science.",
+    "facts": [
+      { "label": "studying", "value": "BSc Biomedical Sciences, NUMed" },
+      { "label": "currently", "value": "President, National Biomedical Science Gathering" },
+      { "label": "learning", "value": "Python and R" },
+      { "label": "off the clock", "value": "Volleyball and chess" }
+    ]
+  },
+  "experience": {
+    "heading": "Experience.",
+    "subheading": "What I've been doing so far.",
+    "entries": [
+      {
+        "when": "Jun – Aug 2026",
+        "title": "Research Intern, Institute for Medical Research",
+        "detail": "Bacteriology Unit. Bacterial identification, MALDI-TOF MS, 16S rRNA PCR, and sequence analysis with MEGA and CLC."
+      },
+      {
+        "when": "May – Jun 2026",
+        "title": "Clinical Laboratory Intern, Premier Integrated Labs",
+        "detail": "Haematology, urinalysis, blood grouping, rapid diagnostics, automated analysers and QC."
+      },
+      {
+        "when": "Apr 2026 – now",
+        "title": "President, National Biomedical Science Gathering",
+        "detail": "Working with a committee of 30+ students to organise a national event for biomedical science students."
+      },
+      {
+        "when": "Jul 2026 – now",
+        "title": "Vice President, NUMed Bioscience Society",
+        "detail": "Previously Publicity and Event Officer."
+      }
+    ]
+  },
+  "research": {
+    "heading": "Research and skills.",
+    "poster": {
+      "label": "Poster, Aug 2026",
+      "title": "Hormonal changes during menopause and their effects on cognitive function",
+      "venue": "MAAFIM 6th International Conference"
+    },
+    "skillsPrompt": "~/isaac-hii $ cat skills.txt",
+    "skills": [
+      { "label": "code", "value": "Python, R, MEGA, CLC Genomics Workbench, BLAST" },
+      { "label": "lab", "value": "PCR, gel electrophoresis, sequencing, MALDI-TOF MS, microscopy" },
+      { "label": "speak", "value": "English, Malay, Chinese" }
+    ]
+  },
+  "hackathons": {
+    "heading": "Hackathons.",
+    "subheading": "Learning by building, with people from other fields.",
+    "entries": [
+      {
+        "path": "hackathons/diabetes-x_2026-11",
+        "title": "Diabetes X Hackathon, MIT Hacking Medicine Malaysia",
+        "text": "My first hackathon. I worked with a team from different backgrounds to build and pitch an idea for diabetes care."
+      }
+    ],
+    "next": {
+      "path": "hackathons/next",
+      "textBefore": "Hoping to join more. If you're forming a team for a health or bio hackathon, I'd be glad to ",
+      "linkText": "hear from you",
+      "textAfter": "."
+    }
+  },
+  "learning": {
+    "heading": "Learning data science.",
+    "subheading": "Still early. Here's what I'm working through.",
+    "prompt": "~/isaac-hii $ tail learning.log",
+    "log": [
+      { "tag": "now", "text": "Python for data analysis" },
+      { "tag": "now", "text": "R and RStudio" },
+      { "tag": "now", "text": "Building this website with an AI coding agent" },
+      { "tag": "done", "text": "Sequence analysis with MEGA, CLC and BLAST (IMR)" }
+    ]
+  },
+  "contact": {
+    "heading": "Say hello.",
+    "subheading": "I'd love to hear what you're working on.",
+    "text": "Whether it's a hackathon team, a research project or just a question, feel free to reach out."
+  },
+  "footer": {
+    "left": "© 2026 Isaac Hii",
+    "right": "Built while learning to code with AI."
+  }
+}

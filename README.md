@@ -17,19 +17,17 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 
 ### Phase 0: planning and setup
 
-- **Plan before building.** I wrote a PRD first and had the agent question it. That caught problems I hadn't noticed, like a text colour that was too faint to pass accessibility checks, and a plan that had me writing all the text twice.
-- **Why Astro over plain HTML.** Plain HTML has fewer files, but it can't keep my text in a separate file without extra JavaScript, which hurts search engines and link previews. Astro does that when it builds the site.
-- **Deploy early, not last.** Putting a bare page online on day one means any hosting problem shows up now, not after weeks of work.
-- **A README is the repo's front page.** The one that came with Astro was a generic template. Mine should say what the project is and why I built it, since people may find my GitHub from my CV.
-- **`.DS_Store` is macOS junk.** Finder creates it in every folder to remember view settings. `.gitignore` tells Git never to save it.
-- **`gh auth login` signs the GitHub CLI in to my account** through the browser, so tools can create repos and push for me without ever seeing my password.
-- **Every commit records an author and an email, and both are public.** Git had made up an email from my Mac's name. I switched to GitHub's private "noreply" address so commits link to my profile without exposing my real email.
-- **Code should explain itself.** I asked for plain-English comments in every file so I can learn by reading the code, not just by running it.
+- **Plan first, then question the plan.** Having my spec reviewed before writing any code caught gaps early, such as an accessibility issue and a step that would have meant doing the same work twice.
+- **Choose tools for the goal.** I picked Astro over plain HTML because it keeps the content separate from the layout without hurting search or link previews.
+- **Ship early.** I put a bare page online on day one, so hosting problems show up now rather than at the end.
+- **A public repo is part of how I present myself.** I rewrote the README for the people who might read it, and checked what personal details Git and GitHub make public.
+- **Understand, don't just accept.** I asked for plain-English comments in the code so I learn from reading it, not only from running it.
 
 ## How it's built
 
 - [Astro](https://astro.build) builds the site into plain HTML
-- Plain CSS, monochrome design with small terminal touches
+- Plain CSS in one stylesheet, `src/styles/global.css`, with the colours set once as design tokens. A separate set of rules handles phones
+- Geist and Geist Mono fonts, bundled with the site rather than loaded from Google
 - All the text lives in one file, `src/content.json`, so I can edit it without touching the layout
 - Hosted on GitHub Pages, and every push to `main` goes live automatically
 
