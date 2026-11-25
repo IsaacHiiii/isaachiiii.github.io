@@ -189,15 +189,15 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 
 ## 9. Done criteria
 
-- [ ] Site is live at `https://isaachiiii.github.io`
-- [ ] Side by side with option H, the colours, fonts, spacing and section order match
-- [ ] The ATGC background, glitches, cursor, DNA helix and scroll journey work, and all motion stops with reduce motion on
-- [ ] VoiceOver reads my name once, and skips the ATGC grid
-- [ ] My email address doesn't appear anywhere in the HTML source, but the Email me button works
-- [ ] Looks right on my phone (375px wide) and laptop, with no sideways scrolling
-- [ ] All MVP features in section 5 work
-- [ ] Lighthouse scores of 90+ for performance, accessibility and SEO
-- [ ] No placeholder text left anywhere (filled in, or removed as described in section 4)
+- [x] Site is live at `https://isaachiiii.github.io`
+- [x] Side by side with option H, the colours, fonts and section order match (the hero and spacing were changed on purpose; section 6 describes the current design)
+- [x] The ATGC background, glitches, cursor, DNA helix and scroll journey work, and all motion stops with reduce motion on
+- [x] VoiceOver reads my name once, and skips the ATGC grid
+- [x] My email address doesn't appear anywhere in the HTML source, but the Email me button works
+- [x] Looks right on my phone (375px wide) and laptop, with no sideways scrolling
+- [x] All MVP features in section 5 work
+- [x] Lighthouse scores of 90+ for performance, accessibility and SEO (25 Nov 2026, live site: 99–100 on phone and laptop in every category)
+- [x] No placeholder text left anywhere (filled in, or removed as described in section 4)
 - [ ] I've checked every line of content myself for accuracy
 - [ ] I can change a line of text, push, and see it live without help
 - [ ] I can explain what each file in the project does

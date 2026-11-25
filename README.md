@@ -27,6 +27,8 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 
 **7. Checking the real thing (Phase 4).** Finally I checked the live site, not just my laptop's copy: automated checks for every file, screen size and link, then my own laptop and phone for how it feels, with reduce motion and VoiceOver turned on.
 
+**8. Ready to share (Phase 5).** A Lighthouse audit showed the site was already fast and accessible, so I fixed the one gap it found and focused on how the link looks when shared: a preview card made from the real hero, a small helix tab icon and a clear description for search results.
+
 ## What I learned
 
 <!-- Add a line or two after each phase. -->
@@ -83,6 +85,13 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **Split the checking between machine and person.** Automated checks covered what's tedious to do by hand: every file loading, no sideways scrolling at five screen sizes, the email never appearing in the page. I kept for myself what only a real device can tell: how scrolling feels, whether links open the right app, and what a screen reader says.
 - **A failed check isn't always a failure.** LinkedIn refused the automated link check because it blocks bots, so I confirmed that link by hand instead.
 - **Test the settings other people use.** I turned on reduce motion and VoiceOver and opened the site in a second browser, because the people visiting won't all browse the way I do.
+
+### Phase 5: polish
+
+- **Measure before you fix.** I ran a Lighthouse audit before changing anything. The site already scored 100 almost everywhere, so instead of optimising what was fine, I fixed the one real gap: a missing robots.txt.
+- **The share preview is the first impression.** Most people will meet the site as a link in a message, so I gave it a proper preview card. I made it from a picture of the real hero, so the preview and the site look the same.
+- **Small sizes need simple shapes.** The tab icon is a few strokes of a double helix. My name in a fancy font would have been unreadable at 16 pixels.
+- **Some checks only I can tick.** The automated checks confirm the site works. Whether every line is accurate, and whether I can explain each file, is mine to answer.
 
 ## How it's built
 
