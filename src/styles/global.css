@@ -841,3 +841,68 @@ a:focus-visible {
     text-align: left;
   }
 }
+
+/* ---------- 11. DNA helix journey ----------
+   The hero's canvas, where src/scripts/helix.js draws the DNA helix. */
+.journey-pin {
+  position: relative; /* so the canvas can fill it */
+}
+.helix {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* clicks go to the page; the script listens on the pin */
+}
+
+/* The scroll journey, only once the script has added "journey-ready" to
+   the page (never with reduce motion on, or JavaScript off).
+   .journey becomes 1.7 screens tall. .journey-pin is one screen tall and
+   "sticky", so it stays stuck to the top of the window while you scroll
+   through the extra 0.7 of a screen. (Bigger = a longer, slower journey.) svh = "small viewport height", which on
+   phones ignores the address bar. */
+.journey-ready .journey {
+  height: 170vh;
+}
+.journey-ready .journey-pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* scattered letters past the edges are cut off */
+}
+.journey-ready .hero-wrap {
+  width: 100%;
+}
+/* The hero text sits centred in the screen (with room for the nav at the
+   top). As --journey goes from 0 to 1 it drifts up and has faded out by
+   a third of the way. var(--journey, 0) = "--journey, or 0 if not set". */
+.journey-ready .hero-content {
+  padding-top: 5rem;
+  padding-bottom: 2rem;
+  opacity: calc(1 - var(--journey, 0) * 3);
+  transform: translateY(calc(var(--journey, 0) * -30vh));
+}
+/* Keyboard users tabbing into the hero always see what has focus. */
+.journey-ready .hero-content:focus-within {
+  opacity: 1;
+  transform: none;
+}
+/* The rest of the page starts while the journey is still running, so
+   "A bit about me" slides up over the scene as the letters scatter,
+   instead of arriving after a screen of empty space. The negative margin
+   pulls it 70% of a screen higher (55% on phones, which have less space
+   above the section), so it starts arriving about halfway through.
+   position + z-index draw it on top of the pinned scene. */
+.journey-ready .main {
+  position: relative;
+  z-index: 1;
+  margin-top: -70vh;
+}
+@media (max-width: 640px) {
+  .journey-ready .main {
+    margin-top: -55vh;
+  }
+}

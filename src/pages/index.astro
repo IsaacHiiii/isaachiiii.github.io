@@ -102,6 +102,8 @@ const atgcPatchStyle =
 			import '../scripts/cursor-reveal.js';
 			// Fades sections in as they scroll onto the screen.
 			import '../scripts/scroll-reveal.js';
+			// Draws the DNA helix in the hero and runs the scroll journey.
+			import '../scripts/helix.js';
 		</script>
 
 		<!-- ===== Navigation bar ===== -->
@@ -123,9 +125,21 @@ const atgcPatchStyle =
 			</div>
 		</header>
 
-		<!-- ===== Hero ===== -->
+		<!--
+			===== Hero =====
+			.journey is a tall box you scroll through (only when the animation is
+			on). .journey-pin stays stuck to the screen meanwhile, so the hero and
+			its DNA helix stay in view while the helix untwists and dissolves.
+			The helix is drawn on the <canvas> by src/scripts/helix.js. A canvas
+			is a blank drawing surface for scripts. It's decoration, so
+			aria-hidden hides it from screen readers.
+			id="top" is on the outer box so the logo link goes to the very start.
+		-->
+		<div class="journey" id="top">
+		<div class="journey-pin">
+		<canvas class="helix" aria-hidden="true"></canvas>
 		<div class="hero-wrap">
-			<section id="top" class="hero">
+			<section class="hero">
 				<div class="hero-content">
 					<p class="prompt-pill">
 						{hero.prompt}<span class="cursor" aria-hidden="true"></span>
@@ -148,6 +162,8 @@ const atgcPatchStyle =
 					</div>
 				</div>
 			</section>
+		</div>
+		</div>
 		</div>
 
 		<!-- <main> marks the page's main content, which helps screen readers. -->
