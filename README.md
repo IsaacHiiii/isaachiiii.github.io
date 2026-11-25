@@ -11,6 +11,20 @@ I'm a second-year Biomedical Sciences student at Newcastle University Medicine M
 
 The full plan is in [docs/PRD.md](docs/PRD.md).
 
+## How it came together
+
+**1. Plan before code.** I started with a written spec ([docs/PRD.md](docs/PRD.md)): who the site is for, the exact copy, the design tokens and a build plan in phases. I had it reviewed before any code existed, and I kept it up to date as the site changed, so it always describes what the site really does.
+
+**2. Live from day one.** Phase 0 was a bare Astro page deployed to GitHub Pages. Every push to `main` has gone live automatically since then, so hosting was never a last-minute surprise.
+
+**3. Layout, then motion, then structure.** Phase 1 built the whole page from one content file, checked on phone and laptop side by side. Phase 2 added the motion: a DNA letter background generated at build time, flickering glitches, a glitching name and a blinking cursor, all of which switch off for visitors who ask for reduced motion. Phase 3 turned the repeated parts into components without changing a single pixel, which I checked by comparing the built HTML before and after.
+
+**4. An experiment on a branch.** I wanted the first screen to feel special without losing the calm design. I made a bigger, gradient title, letters that appear around the cursor, buttons that react, and sections that slide in. My first attempt at an intro became a separate cover page, which wasn't what I meant, so I threw it away. Showing the agent a reference site I liked fixed the misunderstanding at once. That led to the centrepiece: a 3D DNA helix drawn on a canvas, running through my name, which untwists and dissolves into the background as you scroll.
+
+**5. Making it feel right.** This took the most rounds. Holding the scene in place while scrolling looked good but felt sticky, especially on a phone. I kept it on laptops and dropped it on phones, and I moved the fades onto CSS scroll-driven animations so they move exactly with the scroll. A short glide now finishes the opening if you stop halfway, and it always follows the direction you were scrolling. Several bugs only showed up with real scrolling, not in screenshots, so I started testing with real mouse-wheel input.
+
+**6. Content and polish.** I cut what didn't earn its place: the tagline under my name, the CV download, an extra fact and the arrow icons. The links became quiet icon buttons with a small label that pops up on hover. My email is put together in the browser, so it never appears in the page's HTML for scrapers to find. I also gave every section more room to breathe.
+
 ## What I learned
 
 <!-- Add a line or two after each phase. -->
@@ -53,6 +67,14 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **A branch makes experiments safe.** All of this was built on a separate branch, so I could try bold ideas, throw one away completely, and leave the live site untouched until I was sure.
 - **Feel matters as much as looks.** How long the scroll lasts and when the next section arrives changed how the page felt more than any colour or size did.
 
+### Experiment, part 2: making it feel right
+
+- **How it feels decides it, not how it looks in a screenshot.** The pinned scroll looked right in every screenshot and still felt sticky in my hand. I judged by using it on my laptop and my phone.
+- **The same idea doesn't suit every device.** Pinning the scene worked with a trackpad but fought a finger on a phone, so each gets its own behaviour.
+- **Test the way people really use it.** Jumping straight to a scroll position passed every check. Real wheel scrolling found the glide fighting itself. Interrupting it halfway, in both directions, found the rest.
+- **Simpler often wins.** Several fixes removed code: no pinning on phones, no CSS snapping, no CV button. The site got better and smaller at the same time.
+- **Privacy is a design decision too.** My email works with one click but never sits in the page for bots to collect.
+
 ## How it's built
 
 - [Astro](https://astro.build) builds the site into plain HTML
@@ -62,7 +84,7 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - The parts that repeat are components in `src/components/`: `Button`, `Heading` (the two-tone section headings), `Card` (the black boxes), `Entry` (a label, a title and a detail) and `SocialLinks` (the Instagram, LinkedIn, GitHub and email icon buttons, with Phosphor icons in `src/icons/`). The page itself, `src/pages/index.astro`, puts them together
 - My email address is never written in the page's HTML, so spam bots can't scrape it. `src/scripts/email.js` joins it from two scrambled pieces in the visitor's browser and fills in the mail links
 - Animations:
-  - The hero's centrepiece is a 3D DNA double helix of A, C, G and T letters, drawn on a canvas by `src/scripts/helix.js`. It turns, tilts towards the mouse and pulses on click. The page opens on a full-screen scene with no nav. As you scroll, the text fades, the helix untwists and its letters scatter into the background, and the nav fades in. On laptops the scene holds still while this happens; on phones it scrolls away. The fades use CSS scroll-driven animations, so they move exactly with the scroll.
+  - The hero's centrepiece is a 3D DNA double helix of A, C, G and T letters, drawn on a canvas by `src/scripts/helix.js`. It turns, tilts towards the mouse and pulses on click. The page opens on a full-screen scene with no nav. As you scroll, the text fades, the helix untwists and its letters scatter into the background, and the nav fades in. On laptops the scene holds still while this happens; on phones it scrolls away. The fades use CSS scroll-driven animations, so they move exactly with the scroll. If you stop halfway, `src/scripts/intro-snap.js` glides on in the direction you were scrolling, so the opening never gets stuck.
   - The background of A, C, G and T letters, shown in random patches, is generated when the site is built. On a laptop, letters also appear in a circle around the mouse (`src/scripts/cursor-reveal.js`).
   - `src/scripts/atgc-glitches.js` adds the flickering background glitches, and `src/scripts/scroll-reveal.js` fades each section in as it scrolls into view.
   - The name glitch, the blinking cursor and the button hover and press states are plain CSS.
