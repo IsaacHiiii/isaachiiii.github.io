@@ -71,14 +71,14 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 
 - One page that works on phone, tablet and laptop (see the responsive rules in section 6)
 - Sticky floating navigation bar linking to each section, plus GitHub and Get in touch buttons
-- Hero with the ATGC background, background glitches and name glitch (spec in section 6)
+- Hero with the DNA helix and scroll journey, the ATGC background, background glitches and name glitch (spec in section 6)
 - Every animation switches off for visitors with "reduce motion" turned on
 - Links to email, LinkedIn and GitHub
 - **Email is hidden from scrapers.** The address is never written in the HTML. A small script puts it together from pieces when the page loads and sets the "Email me" button's `mailto:` link. Visitors without JavaScript still have the LinkedIn button.
 - **Public downloadable CV** as a PDF, with phone number and home address removed. Check the PDF's metadata (author, file properties) and remove anything private before uploading.
 - Basic SEO: page title, meta description, and a preview image for when the link is shared on WhatsApp or LinkedIn
 - Basic accessibility: readable contrast, visible keyboard focus, real links and buttons
-- **Screen readers:** the ATGC grid and both glitch copies of the name are hidden with `aria-hidden="true"`, so the name is read once. Test with VoiceOver on Mac.
+- **Screen readers:** the ATGC grid, the helix canvas and both glitch copies of the name are hidden with `aria-hidden="true"`, so the name is read once. Test with VoiceOver on Mac.
 
 **Later (stretch goals)**
 
@@ -95,7 +95,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 **Principles**
 
 - Monochrome only: black, white and greys. No accent colour.
-- Calm and humble. The only loud thing is the glitch in the hero.
+- Calm and humble. The loud moments all live in the hero: the DNA helix and its scroll journey, and the name glitch. Everything below it stays quiet.
 - Biohacker touches stay small: a terminal prompt, mono file paths, log and skills blocks.
 - Big two-tone headings: a white line, then a grey line.
 
@@ -121,7 +121,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 
 | Element | Size / line height | Weight | Letter spacing |
 | --- | --- | --- | --- |
-| H1 (hero) | 4.5rem / 1.02 (shrink on phones with `clamp(2.5rem, 9vw, 4.5rem)`) | 700 | −0.04em |
+| H1 (hero) | Up to 6rem / 1, sized so "Biohacker in the making." always fits on one line: `min(6rem, calc((100vw - 80px) / 11.5))` (2.5rem cap on phones). The name has a left to right gradient, `#ffffff` → `#9b9b9b` | 700 | −0.04em |
 | H2 (section) | 2.5rem / 1.1 (about 2rem on phones) | 600 | −0.035em |
 | H3 (entry title) | 1.15–1.25rem | 600 | normal |
 | Body | 1rem–1.15rem / 1.65–1.75 | 400 | normal |
@@ -130,7 +130,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 **Layout, top to bottom**
 
 1. **Navigation bar.** Sticky, 12px from the top, max width 1180px, rounded 16px, 1px `--border`, background `rgba(17,17,17,0.85)` with a 12px backdrop blur. Left: "isaac.hii" in bold. Right: grey links (Experience, Research, Hackathons, Learning), a **GitHub** outline button, and a white **Get in touch** button. Buttons are plain text, with no arrow icons. Every link and button is at least 44px tall.
-2. **Hero.** No frame or box: the hero sits directly on the page background, max width 1180px, about 8rem padding above and 7.5rem below. Content centred: the prompt pill, the two-line H1, the intro (max about 36rem wide), then the two buttons.
+2. **Hero.** No frame or box: the hero sits directly on the page background, max width 1180px. Content centred: the prompt pill, the two-line H1, the intro (max about 36rem wide), then the two buttons. Behind it, a DNA helix runs diagonally through the title (see Animations). With the animation on, the hero is pinned for a short scroll journey and the next section slides up over it; with reduce motion on, it's a normal hero with about 8rem padding above and 7.5rem below.
 3. **Sections.** One centred column with the same width as the nav bar (max 1180px, 1rem side padding), so the boxes line up with the nav bar's edges. 6rem between sections. Section headings are indented to line up with the text inside the boxes. On laptops, Experience entries and the poster put the date or label in a 10rem left column, beside the title and detail. Each section has a two-tone H2 and then a black card (1px `--border`, rounded 16px, padding 0.5rem by 2rem). Rows inside a card have 1.5rem padding above and below, separated by 1px `--divider` lines. Terminal blocks use Geist Mono, a header line with the prompt, then the lines at line height about 2.
 4. **Contact.** Centred card, rounded 24px, 4rem padding, two-tone heading, short text, two buttons.
 5. **Footer.** Small `--faint` text, left and right, wrapping on phones.
@@ -138,9 +138,14 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 **Animations** (all off when the visitor has "reduce motion" on)
 
 - **ATGC background.** A grid of random A, C, G and T letters, Geist Mono 14px, line height 20px, letter spacing 0.35em, `--text` at 16% opacity, covering the **whole page background** (not just the hero), fixed behind all content. The letters show only in **8 random soft patches**, fading to nothing between them; each patch is a radial gradient with a random position and size, picked at build time. On top of that, a radial mask (ellipse 75% wide, 70% tall, centred) keeps it faint behind the text (about 18% visible in the middle, 60% at 45%, fully visible from 80%). **The grid and its patches are generated by Astro at build time** and arrives already in the HTML. It doesn't move and needs no script. With reduce motion on, the grid still shows; only the glitches stop. The whole grid is `aria-hidden="true"`.
-- **Background glitches.** The only part that needs a script. Every 110ms there's an 18% chance of a new glitch, with at most 3 on screen. 70% are small: 3 to 9 white letters (90% opacity) on a black background, nudged 4–13px sideways, re-scrambled every tick, lasting 2–4 ticks. 30% are streaks: 24–53 grey (`--heading-grey`, 55% opacity) letters lasting 2 ticks. They sit on the same grid as the background letters, and only appear inside the patches (fading out at a patch's edge, like the letters). The script doesn't start at all with reduce motion on.
+- **Background glitches.** Every 110ms there's an 18% chance of a new glitch, with at most 3 on screen. 70% are small: 3 to 9 white letters (90% opacity) on a black background, nudged 4–13px sideways, re-scrambled every tick, lasting 2–4 ticks. 30% are streaks: 24–53 grey (`--heading-grey`, 55% opacity) letters lasting 2 ticks. They sit on the same grid as the background letters, and only appear inside the patches (fading out at a patch's edge, like the letters). The script doesn't start at all with reduce motion on.
 - **Name glitch.** Every 6.5s (first at 1.2s), the first line of the H1 glitches for about 0.2s: two copies of the name (one white, one grey, each on black) show thin horizontal slices using `clip-path`, shifted between −7px and +6px over three quick steps, then disappear. Built with `::before` and `::after` using `content: attr(data-text)`. The copies must not be read by screen readers: the visible name is read once (e.g. the glitch layer is `aria-hidden="true"` and the real text stays in the H1).
-- **Cursor.** A block cursor in the prompt pill blinks every 1.1s.
+- **Cursor.** A block cursor in the prompt pill blinks every 1.1s: one character wide, a full character cell tall, one space after the text.
+- **DNA helix hero.** A 3D double helix of A/C/G/T base pairs (A–T, C–G), drawn on a `<canvas>` by `src/scripts/helix.js` with plain JavaScript (no library). It runs diagonally (about 18°) through the title: two backbone curves, faint rungs, letters bigger and brighter at the front, fading at the screen edges. It turns slowly, tilts towards the mouse with eased movement, and a click on empty hero space sends a pulse of light along the strands. It pauses when off screen. The canvas is `aria-hidden="true"`.
+- **Scroll journey.** The hero sits in a box 1.7 screens tall with a sticky, one-screen pinned layer. Scroll progress (0 to 1, eased) drives: the hero text drifting up and fading (gone by a third), the helix untwisting into a flat ladder and stretching (15–60%), then its lines vanishing and letters scattering into the background (55–100%). The page content overlaps the journey (70% of a screen on laptops, 55% on phones), so "A bit about me" starts sliding up over the scene at about 45%. Keyboard focus inside the hero always shows the hero text. With reduce motion on: a still helix, no pinning. Without JavaScript: the normal hero.
+- **Cursor reveal.** On devices with a mouse, the ATGC letters show in a soft 180px circle around the pointer, added to the background's masks. Updates at most once per frame.
+- **Scroll reveals.** Each section below the hero fades in and slides 32px into place every time it scrolls into view (`IntersectionObserver`, 15% visible), rising when scrolling down and sliding down when scrolling back up. It hides again only once fully off screen.
+- **Button states.** Hover (mouse only): lift 1px, solid buttons go pure white, outline buttons get a lighter border and `#181818` background. Press: scale to 98%. All transitions 300ms on `cubic-bezier(0.22, 1, 0.36, 1)`. With reduce motion on, colours still change but nothing moves.
 
 **Responsive rules**
 
@@ -156,7 +161,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 | Framework | Astro | Builds a plain static site, reads copy from a data file at build time, easy to add a blog later |
 | Styling | Plain CSS with the CSS variables from section 6. No Tailwind | The design is mostly exact values, which are easiest to keep in one stylesheet |
 | Fonts | Geist and Geist Mono via Fontsource, bundled with the site | Faster first load and no request to Google |
-| Animations | Plain CSS for the cursor and name glitch. ATGC grid generated at build time. One small script for the background glitches only | No animation library needed |
+| Animations | Plain CSS for the cursor, name glitch and button states. ATGC grid generated at build time. Small plain scripts for the background glitches, the cursor reveal, the scroll reveals and the DNA helix (canvas) | No animation library needed |
 | Content | `src/content.json`, holding all the copy in section 4, from Phase 1 | I can reword anything without touching layout code |
 | Version control | Git and GitHub. The project is its own repo in `Documents/VS Code/isaachiiii.github.io` | Every working step is saved, so I can undo anything the agent breaks |
 | Hosting | GitHub Pages, repo `IsaacHiiii/isaachiiii.github.io`, deployed with Astro's official GitHub Actions workflow | Deploys automatically on every push. URL: `https://isaachiiii.github.io` |
@@ -187,7 +192,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 
 - [ ] Site is live at `https://isaachiiii.github.io`
 - [ ] Side by side with option H, the colours, fonts, spacing and section order match
-- [ ] The ATGC background, glitches and cursor work, and all of them stop with reduce motion on
+- [ ] The ATGC background, glitches, cursor, DNA helix and scroll journey work, and all motion stops with reduce motion on
 - [ ] VoiceOver reads my name once, and skips the ATGC grid
 - [ ] My email address doesn't appear anywhere in the HTML source, but the Email me button works
 - [ ] Looks right on my phone (375px wide) and laptop, with no sideways scrolling

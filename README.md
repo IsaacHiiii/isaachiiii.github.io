@@ -45,6 +45,14 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **A rule only works if it has no exceptions.** The button labels were still written in the layout code, which went against my rule that all wording lives in one file. Moving them changed nothing on screen, but it means I always know where to look.
 - **"It looks the same" can be proven.** After each change I compared the built page with the version before it. Matching HTML was stronger evidence than looking at it by eye.
 
+### Experiment: an interactive hero
+
+- **A reference beats a description.** I described the effect I wanted in my own words and got a cover page I didn't want. Sharing a site I liked made the idea clear in seconds. Now I start with an example and say which part of it I'm after.
+- **Knowing the names helps.** Terms like scroll pinning, scroll-linked animation and mouse parallax let me ask for exactly what I mean.
+- **Inspired by, not copied.** I took the technique from a site I admired (a living visual that changes as you scroll) and made it my own: a DNA helix that dissolves into the background my site already had.
+- **A branch makes experiments safe.** All of this was built on a separate branch, so I could try bold ideas, throw one away completely, and leave the live site untouched until I was sure.
+- **Feel matters as much as looks.** How long the scroll lasts and when the next section arrives changed how the page felt more than any colour or size did.
+
 ## How it's built
 
 - [Astro](https://astro.build) builds the site into plain HTML
@@ -53,10 +61,11 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - All the text lives in one file, `src/content.json`, so I can edit it without touching the layout
 - The parts that repeat are components in `src/components/`: `Button`, `Heading` (the two-tone section headings), `Card` (the black boxes) and `Entry` (a label, a title and a detail). The page itself, `src/pages/index.astro`, puts them together
 - Animations:
-  - The background of A, C, G and T letters, shown in random patches, is generated when the site is built.
-  - The name glitch and the blinking cursor are plain CSS.
-  - One small script, `src/scripts/atgc-glitches.js`, adds the flickering background glitches.
-  - All the motion switches off when a visitor has "reduce motion" turned on.
+  - The hero's centrepiece is a 3D DNA double helix of A, C, G and T letters, drawn on a canvas by `src/scripts/helix.js`. It turns, tilts towards the mouse and pulses on click. Scrolling runs a short pinned "journey": the title fades, the helix untwists, and its letters scatter into the background as the next section slides up.
+  - The background of A, C, G and T letters, shown in random patches, is generated when the site is built. On a laptop, letters also appear in a circle around the mouse (`src/scripts/cursor-reveal.js`).
+  - `src/scripts/atgc-glitches.js` adds the flickering background glitches, and `src/scripts/scroll-reveal.js` fades each section in as it scrolls into view.
+  - The name glitch, the blinking cursor and the button hover and press states are plain CSS.
+  - No animation libraries: everything is plain CSS and JavaScript. All the motion switches off when a visitor has "reduce motion" turned on.
 - Hosted on GitHub Pages, and every push to `main` goes live automatically
 
 ## Running it locally
