@@ -17,13 +17,15 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 
 **2. Live from day one.** Phase 0 was a bare Astro page deployed to GitHub Pages. Every push to `main` has gone live automatically since then, so hosting was never a last-minute surprise.
 
-**3. Layout, then motion, then structure.** Phase 1 built the whole page from one content file, checked on phone and laptop side by side. Phase 2 added the motion: a DNA letter background generated at build time, flickering glitches, a glitching name and a blinking cursor, all of which switch off for visitors who ask for reduced motion. Phase 3 turned the repeated parts into components without changing a single pixel, which I checked by comparing the built HTML before and after.
+**3. Layout, then motion, then structure (Phases 1–3).** Phase 1 built the whole page from one content file, checked on phone and laptop side by side. Phase 2 added the motion: a DNA letter background generated at build time, flickering glitches, a glitching name and a blinking cursor, all of which switch off for visitors who ask for reduced motion. Phase 3 turned the repeated parts into components without changing a single pixel, which I checked by comparing the built HTML before and after.
 
-**4. An experiment on a branch.** I wanted the first screen to feel special without losing the calm design. I made a bigger, gradient title, letters that appear around the cursor, buttons that react, and sections that slide in. My first attempt at an intro became a separate cover page, which wasn't what I meant, so I threw it away. Showing the agent a reference site I liked fixed the misunderstanding at once. That led to the centrepiece: a 3D DNA helix drawn on a canvas, running through my name, which untwists and dissolves into the background as you scroll.
+**4. Redesigning the hero.** After Phase 3, I wanted the first screen to feel special without losing the calm design. I tried it on a separate branch first, so the live site stayed safe while I explored. I made a bigger, gradient title, letters that appear around the cursor, buttons that react, and sections that slide in. My first attempt at an intro became a separate cover page, which wasn't what I meant, so I threw it away. Showing the agent a reference site I liked fixed the misunderstanding at once. That led to the centrepiece: a 3D DNA helix drawn on a canvas, running through my name, which untwists and dissolves into the background as you scroll.
 
 **5. Making it feel right.** This took the most rounds. Holding the scene in place while scrolling looked good but felt sticky, especially on a phone. I kept it on laptops and dropped it on phones, and I moved the fades onto CSS scroll-driven animations so they move exactly with the scroll. A short glide now finishes the opening if you stop halfway, and it always follows the direction you were scrolling. Several bugs only showed up with real scrolling, not in screenshots, so I started testing with real mouse-wheel input.
 
-**6. Content and polish.** I cut what didn't earn its place: the tagline under my name, the CV download, an extra fact and the arrow icons. The links became quiet icon buttons with a small label that pops up on hover. My email is put together in the browser, so it never appears in the page's HTML for scrapers to find. I also gave every section more room to breathe.
+**6. Content and polish.** Then I cut what didn't earn its place: the tagline under my name, the CV download, an extra fact and the arrow icons. The links became quiet icon buttons with a small label that pops up on hover. My email is put together in the browser, so it never appears in the page's HTML for scrapers to find. I also gave every section more room to breathe.
+
+**7. Checking the real thing (Phase 4).** Finally I checked the live site, not just my laptop's copy: automated checks for every file, screen size and link, then my own laptop and phone for how it feels, with reduce motion and VoiceOver turned on.
 
 ## What I learned
 
@@ -59,7 +61,7 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **A rule only works if it has no exceptions.** The button labels were still written in the layout code, which went against my rule that all wording lives in one file. Moving them changed nothing on screen, but it means I always know where to look.
 - **"It looks the same" can be proven.** After each change I compared the built page with the version before it. Matching HTML was stronger evidence than looking at it by eye.
 
-### Experiment: an interactive hero
+### Redesigning the hero (between Phases 3 and 4)
 
 - **A reference beats a description.** I described the effect I wanted in my own words and got a cover page I didn't want. Sharing a site I liked made the idea clear in seconds. Now I start with an example and say which part of it I'm after.
 - **Knowing the names helps.** Terms like scroll pinning, scroll-linked animation and mouse parallax let me ask for exactly what I mean.
@@ -67,13 +69,20 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **A branch makes experiments safe.** All of this was built on a separate branch, so I could try bold ideas, throw one away completely, and leave the live site untouched until I was sure.
 - **Feel matters as much as looks.** How long the scroll lasts and when the next section arrives changed how the page felt more than any colour or size did.
 
-### Experiment, part 2: making it feel right
+### Making it feel right
 
 - **How it feels decides it, not how it looks in a screenshot.** The pinned scroll looked right in every screenshot and still felt sticky in my hand. I judged by using it on my laptop and my phone.
 - **The same idea doesn't suit every device.** Pinning the scene worked with a trackpad but fought a finger on a phone, so each gets its own behaviour.
 - **Test the way people really use it.** Jumping straight to a scroll position passed every check. Real wheel scrolling found the glide fighting itself. Interrupting it halfway, in both directions, found the rest.
 - **Simpler often wins.** Several fixes removed code: no pinning on phones, no CSS snapping, no CV button. The site got better and smaller at the same time.
 - **Privacy is a design decision too.** My email works with one click but never sits in the page for bots to collect.
+
+### Phase 4: checking the live site
+
+- **"It works on my laptop" isn't the finish line.** The live site is a separate copy, built and hosted elsewhere. I confirmed it matched my latest build exactly before trusting it.
+- **Split the checking between machine and person.** Automated checks covered what's tedious to do by hand: every file loading, no sideways scrolling at five screen sizes, the email never appearing in the page. I kept for myself what only a real device can tell: how scrolling feels, whether links open the right app, and what a screen reader says.
+- **A failed check isn't always a failure.** LinkedIn refused the automated link check because it blocks bots, so I confirmed that link by hand instead.
+- **Test the settings other people use.** I turned on reduce motion and VoiceOver and opened the site in a second browser, because the people visiting won't all browse the way I do.
 
 ## How it's built
 

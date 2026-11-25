@@ -1,0 +1,4 @@
+# robots.txt: tells search engines what they may list.
+# "Allow: /" means everything on this site.
+User-agent: *
+Allow: /

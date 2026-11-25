@@ -18,6 +18,12 @@ import '../styles/global.css';
 // gives "Isaac Hii Nian Hong" from src/content.json.
 import content from '../content.json';
 
+// Full web addresses for the link preview tags. Astro.site is the live
+// address set in astro.config.mjs. Preview apps need complete addresses
+// (with https://), not just "/og-image.png".
+const pageUrl = new URL('/', Astro.site).href;
+const ogImage = new URL('/og-image.png', Astro.site).href;
+
 // Components: reusable pieces of the page, each in its own file in src/components/.
 import Button from '../components/Button.astro';
 import Heading from '../components/Heading.astro';
@@ -67,11 +73,32 @@ const atgcPatchStyle =
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!-- Tab icons: the helix (SVG for modern browsers, .ico for older ones),
+		     and a bigger PNG for iPhone home screens. -->
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
+		<link rel="icon" href="/favicon.ico" sizes="48x48" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<!-- Curly braces { } insert a value from the frontmatter into the HTML. -->
 		<title>{site.title}</title>
 		<meta name="description" content={site.description} />
+		<!-- The page's one true address, so search engines don't treat copies as different pages. -->
+		<link rel="canonical" href={pageUrl} />
+		<!--
+			Link previews. When the link is shared on WhatsApp, LinkedIn, iMessage
+			and so on, those apps read these "og:" (Open Graph) tags to build the
+			preview card: title, description and a 1200x630 image. The image is
+			public/og-image.png, a picture of the hero. The "twitter:" tag asks X
+			for the large-image version of the card.
+		-->
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={pageUrl} />
+		<meta property="og:title" content={site.title} />
+		<meta property="og:description" content={site.description} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={site.title} />
+		<meta name="twitter:card" content="summary_large_image" />
 	</head>
 	<body>
 		<!--
