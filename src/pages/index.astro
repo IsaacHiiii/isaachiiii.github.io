@@ -15,11 +15,15 @@ import '@fontsource/geist-mono/500.css';
 import '../styles/global.css';
 
 // Load all the text. "content" is now an object, so content.hero.name
-// gives "Isaac Hii Nian Hong." from src/content.json.
+// gives "Isaac Hii Nian Hong" from src/content.json.
 import content from '../content.json';
 
+// Components: reusable pieces of the page, each in its own file in src/components/.
+import Button from '../components/Button.astro';
+import Heading from '../components/Heading.astro';
+
 // Pull each part out of content into its own short name.
-const { site, links, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
+const { site, links, buttons, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
 
 // ATGC background: build the grid of random DNA letters once, at build time.
 // Because this runs in the frontmatter, the letters are already written into
@@ -106,12 +110,9 @@ const atgcPatchStyle =
 					{nav.map((item) => (
 						<a href={item.href} class="nav-link">{item.label}</a>
 					))}
-					<a href={links.github} class="btn btn-outline">GitHub</a>
-					<a href="#contact" class="btn btn-solid">
-						Get in touch
-						<!-- The small ↗ arrow. aria-hidden hides it from screen readers, since it's decoration. -->
-						<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
-					</a>
+					<!-- Buttons come from src/components/Button.astro. -->
+					<Button href={links.github} variant="outline">{buttons.github}</Button>
+					<Button href="#contact">{buttons.getInTouch}</Button>
 				</nav>
 			</div>
 		</header>
@@ -136,14 +137,8 @@ const atgcPatchStyle =
 					<p class="hero-intro">{hero.intro}</p>
 					<div class="button-row">
 						<!-- The CV link points to #contact until the PDF is added in Phase 5. -->
-						<a href={links.cv} class="btn btn-solid">
-							Download CV
-							<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
-						</a>
-						<a href={links.linkedin} class="btn btn-outline">
-							LinkedIn
-							<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
-						</a>
+						<Button href={links.cv}>{buttons.cv}</Button>
+						<Button href={links.linkedin} variant="outline">{buttons.linkedin}</Button>
 					</div>
 				</div>
 			</section>
@@ -154,7 +149,7 @@ const atgcPatchStyle =
 			<!-- ===== A bit about me ===== -->
 			<!-- aria-labelledby links the section to its heading, so screen readers can name it. -->
 			<section class="section" aria-labelledby="about-h">
-				<h2 id="about-h">{about.heading}</h2>
+				<Heading id="about-h" heading={about.heading} />
 				<div class="card">
 					<!-- One row: the paragraph, then the facts underneath it. -->
 					<div class="row about-row">
@@ -174,7 +169,7 @@ const atgcPatchStyle =
 
 			<!-- ===== Experience ===== -->
 			<section id="experience" class="section" aria-labelledby="exp-h">
-				<h2 id="exp-h">{experience.heading}<br /><span class="grey">{experience.subheading}</span></h2>
+				<Heading id="exp-h" heading={experience.heading} subheading={experience.subheading} />
 				<!-- <ol> is an ordered list, one <li> per role. -->
 				<ol class="card">
 					{experience.entries.map((entry) => (
@@ -189,7 +184,7 @@ const atgcPatchStyle =
 
 			<!-- ===== Research and skills ===== -->
 			<section id="research" class="section" aria-labelledby="res-h">
-				<h2 id="res-h">{research.heading}</h2>
+				<Heading id="res-h" heading={research.heading} />
 				<div class="card">
 					<div class="row entry">
 						<p class="mono-label">{research.poster.label}</p>
@@ -207,7 +202,7 @@ const atgcPatchStyle =
 
 			<!-- ===== Hackathons ===== -->
 			<section id="hackathons" class="section" aria-labelledby="hack-h">
-				<h2 id="hack-h">{hackathons.heading}<br /><span class="grey">{hackathons.subheading}</span></h2>
+				<Heading id="hack-h" heading={hackathons.heading} subheading={hackathons.subheading} />
 				<div class="card">
 					{hackathons.entries.map((entry) => (
 						<div class="row">
@@ -228,7 +223,7 @@ const atgcPatchStyle =
 
 			<!-- ===== Learning data science ===== -->
 			<section id="learning" class="section" aria-labelledby="learn-h">
-				<h2 id="learn-h">{learning.heading}<br /><span class="grey">{learning.subheading}</span></h2>
+				<Heading id="learn-h" heading={learning.heading} subheading={learning.subheading} />
 				<div class="card log">
 					<p class="mono-label log-header">{learning.prompt}</p>
 					<div class="terminal">
@@ -247,18 +242,12 @@ const atgcPatchStyle =
 
 			<!-- ===== Contact ===== -->
 			<section id="contact" class="contact" aria-labelledby="contact-h">
-				<h2 id="contact-h">{contact.heading}<br /><span class="grey">{contact.subheading}</span></h2>
+				<Heading id="contact-h" heading={contact.heading} subheading={contact.subheading} />
 				<p class="contact-text">{contact.text}</p>
 				<div class="button-row">
 					<!-- Phase 5 adds the script that fills in the hidden email address. -->
-					<a href="#contact" class="btn btn-solid" id="email-button">
-						Email me
-						<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
-					</a>
-					<a href={links.linkedin} class="btn btn-outline">
-						LinkedIn
-						<svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
-					</a>
+					<Button href="#contact" id="email-button">{buttons.email}</Button>
+					<Button href={links.linkedin} variant="outline">{buttons.linkedin}</Button>
 				</div>
 			</section>
 

@@ -1,0 +1,23 @@
+---
+// Heading.astro: a section heading. A white line, and optionally a grey
+// second line underneath (the "two-tone" headings from the design).
+//
+// - id:         the heading's id. The section's aria-labelledby points to it,
+//               so screen readers can announce the section by its heading.
+// - heading:    the white first line
+// - subheading: optional grey second line. Leave it out for a one-line heading
+const { id, heading, subheading } = Astro.props;
+---
+
+<!--
+	{subheading && (...)} means "only add this part when there is a subheading".
+	<> and </> group the line break and the grey span without adding a tag.
+-->
+<h2 id={id}>
+	{heading}
+	{subheading && (
+		<>
+			<br /><span class="grey">{subheading}</span>
+		</>
+	)}
+</h2>

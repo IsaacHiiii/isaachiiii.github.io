@@ -9,6 +9,13 @@
     "github": "https://github.com/IsaacHiiii",
     "cv": "#contact"
   },
+  "buttons": {
+    "github": "GitHub",
+    "getInTouch": "Get in touch",
+    "cv": "Download CV",
+    "linkedin": "LinkedIn",
+    "email": "Email me"
+  },
   "nav": [
     {
       "label": "Experience",

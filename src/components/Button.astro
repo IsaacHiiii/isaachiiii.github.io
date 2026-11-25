@@ -1,0 +1,18 @@
+---
+// Button.astro: one reusable button link, used in the nav, hero and contact card.
+//
+// A component is a small piece of page you write once and use many times,
+// like <Button href="#contact">Get in touch</Button>.
+// The values written on it (href, variant, id) are called "props".
+// Astro.props holds them, and the line below reads them out.
+//
+// - href:    where the button goes
+// - variant: "solid" (white) or "outline" (dark with a border). Default: solid
+// - id:      optional, for a button a script needs to find (Email me)
+const { href, variant = 'solid', id } = Astro.props;
+---
+
+<!-- <slot /> is where the text written between <Button> and </Button> goes. -->
+<a href={href} class={`btn btn-${variant}`} id={id}>
+	<slot />
+</a>

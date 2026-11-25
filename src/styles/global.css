@@ -146,9 +146,8 @@ a:focus-visible {
    Two looks, used in the nav, hero and contact card:
    .btn-solid = white button, .btn-outline = dark button with a border. */
 .btn {
-  display: inline-flex; /* puts the text and the arrow icon side by side */
+  display: inline-flex; /* with align-items, centres the text vertically */
   align-items: center;
-  gap: 0.5rem;
   min-height: 48px; /* big enough to tap with a thumb (PRD: at least 44px) */
   padding: 0 1.25rem;
   border-radius: var(--radius-sm);
@@ -216,7 +215,6 @@ a:focus-visible {
   min-height: 44px;
   padding: 0 1rem;
   font-size: 0.925rem;
-  gap: 0.4rem;
 }
 
 /* ---------- 5. Hero ---------- */
