@@ -37,7 +37,6 @@
   "hero": {
     "prompt": "~/isaac-hii $ whoami",
     "name": "Isaac Hii Nian Hong",
-    "tagline": "Biohacker in the making.",
     "intro": "I'm a biomedical sciences student at NUMed, slowly teaching myself data science and joining hackathons when I can."
   },
   "about": {

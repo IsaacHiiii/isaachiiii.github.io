@@ -354,10 +354,10 @@ a:focus-visible {
 .hero h1 {
   margin: 0;
   font-weight: 700;
-  /* As big as possible, up to 6rem (96px), while "Biohacker in the making."
-     still fits on one line. That line is about 11.3 times the font size wide,
-     and it gets the screen width minus about 80px of padding, so:
-     font size = (100vw - 80px) / 11.5. min(...) picks the smaller value. */
+  /* As big as possible, up to 6rem (96px), while still fitting the screen:
+     the size grows with the screen width minus about 80px of padding,
+     divided by 11.5, which keeps the name comfortably on one line.
+     min(...) picks the smaller value. */
   font-size: min(6rem, calc((100vw - 80px) / 11.5));
   line-height: 1;
   letter-spacing: -0.04em;
@@ -669,15 +669,14 @@ a:focus-visible {
     gap: 1.25rem;
   }
   .hero h1 {
-    /* On phones the title is stacked into four short lines
-       ("Isaac Hii / Nian Hong / Biohacker in / the making.") so it can be
-       much bigger. The longest line is about 6.6 times the font size wide,
-       and gets the screen width minus about 48px of padding, so:
-       font size = (100vw - 48px) / 6.6, capped at 3.5rem (56px). */
+    /* On phones the name is stacked into two short lines
+       ("Isaac Hii / Nian Hong") so it can be much bigger. The size is the
+       screen width minus about 48px of padding, divided by 6.6, capped at
+       3.5rem (56px). */
     font-size: min(3.5rem, calc((100vw - 48px) / 6.6));
     line-height: 1;
     /* "balance" makes the browser break lines into even lengths, so we get
-       two equal lines per part instead of one long line and one short. */
+       two equal lines instead of one long line and one short. */
     text-wrap: balance;
   }
   .hero-intro {
