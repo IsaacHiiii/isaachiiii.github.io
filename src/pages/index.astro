@@ -94,10 +94,14 @@ const atgcPatchStyle =
 		<div class="atgc-glitches" aria-hidden="true" style={atgcPatchStyle} data-patches={JSON.stringify(atgcPatches)}></div>
 		<!--
 			Astro bundles a <script> like this one and loads it in the browser.
-			This is the only script on the page.
+			These are the only scripts on the page.
 		-->
 		<script>
 			import '../scripts/atgc-glitches.js';
+			// Shows the letters in a circle around the mouse.
+			import '../scripts/cursor-reveal.js';
+			// Fades sections in as they scroll onto the screen.
+			import '../scripts/scroll-reveal.js';
 		</script>
 
 		<!-- ===== Navigation bar ===== -->

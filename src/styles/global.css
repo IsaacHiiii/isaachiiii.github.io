@@ -86,17 +86,32 @@ body {
      60% at 45% of the way out, and fully visible from 80% out, so the letters
      are faint behind the text and clearer near the edges.
      -webkit-mask-image is the same thing for older Safari versions. */
-  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.6) 45%, #000 80%);
-  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.6) 45%, #000 80%);
+  /* --spot (the cursor circle, see below) is added as a second mask image,
+     so around the mouse the letters are fully visible even in the middle. */
+  -webkit-mask-image: var(--spot), radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.6) 45%, #000 80%);
+  mask-image: var(--spot), radial-gradient(ellipse 75% 70% at 50% 50%, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.6) 45%, #000 80%);
 }
 /* The inner layer cuts the letters into random soft patches. --patches is
    the list of cloud gradients made in index.astro. Several mask images are
    added together, so letters show wherever any cloud is. Because this layer
-   sits inside .atgc, both masks apply: a cloud in the middle is still faint. */
+   sits inside .atgc, both masks apply: a cloud in the middle is still faint.
+   --spot adds one more "patch": the circle around the mouse. */
 .atgc-patches {
   height: 100%;
-  -webkit-mask-image: var(--patches);
-  mask-image: var(--patches);
+  -webkit-mask-image: var(--spot), var(--patches);
+  mask-image: var(--spot), var(--patches);
+}
+
+/* ---------- Cursor reveal ----------
+   A soft circle around the mouse where the letters show through.
+   src/scripts/cursor-reveal.js sets --mx and --my to the mouse position.
+   They start far off screen, so there's no circle until the mouse moves
+   (and never on phones, or with reduce motion on, where the script doesn't run). */
+:root {
+  --mx: -1000px;
+  --my: -1000px;
+  /* Solid in the middle, half visible at 90px, gone at 180px from the mouse. */
+  --spot: radial-gradient(circle 180px at var(--mx) var(--my), #000 0%, rgba(0, 0, 0, 0.5) 50%, transparent 100%);
 }
 /* The grid doesn't move, so it stays on with reduce motion turned on.
    Only the glitches on top of it stop. */
@@ -162,6 +177,69 @@ a:focus-visible {
   border: 1px solid var(--border-strong);
   background: var(--bg);
   color: var(--text);
+}
+
+/* Scroll reveal: sections start invisible and 32px lower, then glide into
+   place when src/scripts/scroll-reveal.js adds "is-visible". The script
+   removes it again when a section leaves the screen, so it replays every
+   time. A section that left upwards gets "from-above" and waits 32px
+   higher instead, so it slides down into place when you scroll back up.
+   These rules
+   only apply once the script has added "reveal-ready" to the page, so
+   without the script (or with reduce motion on) everything stays visible. */
+.reveal-ready .section,
+.reveal-ready .contact {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal-ready .from-above {
+  transform: translateY(-32px);
+}
+.reveal-ready .section.is-visible,
+.reveal-ready .contact.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Button states: how buttons react when you point at them and press them.
+   "transition" makes the changes glide instead of jumping. The curve
+   cubic-bezier(0.22, 1, 0.36, 1) starts fast and slows down gently at the
+   end, so movement feels like it settles into place. */
+.btn,
+.nav-link {
+  transition:
+    background-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    color 300ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Hover only on devices with a mouse. On phones a tap would leave the
+   button stuck in its hover look. */
+@media (hover: hover) {
+  .btn:hover {
+    transform: translateY(-1px); /* lift slightly */
+  }
+  .btn-solid:hover {
+    background: #ffffff; /* from off-white to pure white */
+  }
+  .btn-outline:hover {
+    border-color: var(--muted); /* lighter border */
+    background: #181818; /* a touch lighter than the page */
+  }
+}
+/* Pressing: shrink very slightly, like a physical button. */
+.btn:active {
+  transform: scale(0.98);
+}
+/* Reduce motion: keep the colour changes, but nothing moves. */
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
 }
 
 /* ---------- 4. Navigation bar ---------- */
@@ -276,11 +354,23 @@ a:focus-visible {
 .hero h1 {
   margin: 0;
   font-weight: 700;
-  /* clamp(smallest, preferred, largest): the heading shrinks on narrow
-     screens (9% of the screen width) but never below 2.5rem or above 4.5rem. */
-  font-size: clamp(2.5rem, 9vw, 4.5rem);
-  line-height: 1.02;
+  /* As big as possible, up to 6rem (96px), while "Biohacker in the making."
+     still fits on one line. That line is about 11.3 times the font size wide,
+     and it gets the screen width minus about 80px of padding, so:
+     font size = (100vw - 80px) / 11.5. min(...) picks the smaller value. */
+  font-size: min(6rem, calc((100vw - 80px) / 11.5));
+  line-height: 1;
   letter-spacing: -0.04em;
+}
+/* The name fades from white on the left to grey on the right.
+   How it works: the gradient is painted as the background of the text,
+   "background-clip: text" cuts that background to the shape of the letters,
+   and a transparent text colour lets it show through. */
+.gname {
+  background: linear-gradient(90deg, #ffffff, #9b9b9b);
+  -webkit-background-clip: text; /* older Safari needs the prefixed version */
+  background-clip: text;
+  color: transparent;
 }
 /* ---------- Name glitch ----------
    Every 6.5s the first line of the heading glitches for about 0.2s:
