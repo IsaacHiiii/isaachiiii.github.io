@@ -83,7 +83,7 @@ if (journey && pin && canvas && canvas.getContext) {
     // The lines between letters vanish quickly once the scatter begins, so
     // only loose letters drift away (not a web of stretched lines).
     const lines = 1 - phase(0.5, 0.68, progress);
-    const radius = Math.min(H * 0.17, W * 0.22); // how far each strand is from the middle
+    const radius = Math.min(H * 0.17, W * 0.3); // how far each strand is from the middle
     const twist = 0.3 * (1 - untwist); // turn between neighbouring pairs
     const stretch = 1 + 0.5 * untwist; // pairs spread out as it untwists
     const focal = 900; // perspective strength: smaller = more dramatic

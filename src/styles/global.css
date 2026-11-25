@@ -669,17 +669,16 @@ a:focus-visible {
     gap: 1.25rem;
   }
   .hero h1 {
-    /* Sized so "Biohacker in the making." fits on one line.
-       In Geist Bold that line is about 11.3 times the font size wide.
-       The space it gets is the screen width (100vw) minus about 80px of
-       padding and borders, so: font size = (100vw - 80px) / 11.5.
-       min(...) picks the smaller value, so it never grows past 2.5rem. */
-    font-size: min(2.5rem, calc((100vw - 80px) / 11.5));
-    line-height: 1.05;
-  }
-  /* Safety net: never let the grey line break onto two lines. */
-  .hero h1 .grey {
-    white-space: nowrap;
+    /* On phones the title is stacked into four short lines
+       ("Isaac Hii / Nian Hong / Biohacker in / the making.") so it can be
+       much bigger. The longest line is about 6.6 times the font size wide,
+       and gets the screen width minus about 48px of padding, so:
+       font size = (100vw - 48px) / 6.6, capped at 3.5rem (56px). */
+    font-size: min(3.5rem, calc((100vw - 48px) / 6.6));
+    line-height: 1;
+    /* "balance" makes the browser break lines into even lengths, so we get
+       two equal lines per part instead of one long line and one short. */
+    text-wrap: balance;
   }
   .hero-intro {
     font-size: 1rem;
@@ -884,6 +883,15 @@ a:focus-visible {
   padding-bottom: 2rem;
   opacity: calc(1 - var(--journey, 0) * 3);
   transform: translateY(calc(var(--journey, 0) * -30vh));
+}
+/* The nav floats over the pinned hero instead of taking up space above it,
+   so the hero is centred in the whole screen (it already leaves room for
+   the nav at the top). "fixed" pins it to the window, like sticky did. */
+.journey-ready .nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  margin-top: 0;
 }
 /* Keyboard users tabbing into the hero always see what has focus. */
 .journey-ready .hero-content:focus-within {
