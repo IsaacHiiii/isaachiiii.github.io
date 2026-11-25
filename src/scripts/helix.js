@@ -3,8 +3,9 @@
   <canvas>, and runs the scroll "journey":
     - the helix turns slowly and tilts towards the mouse
     - a click sends a pulse of light along the strands
-    - scrolling through the pinned hero fades the title, untwists the helix
-      into a flat ladder, then scatters its letters into the background
+    - scrolling untwists the helix into a flat ladder, then scatters its
+      letters into the background. On laptops the hero is pinned while this
+      happens (CSS section 12); on phones the hero just scrolls away.
   With reduce motion on, it draws one still helix and does nothing else.
 */
 
@@ -43,6 +44,7 @@ if (journey && pin && canvas && canvas.getContext) {
   let pulse = null; // { x, start } of the last click
   let visible = true; // is the hero on screen?
   let queued = false; // is a frame already requested?
+  let pinned = false; // is the hero pinned (set by the CSS on laptops)?
 
   // Builds the list of base pairs to fill the screen width (plus extra,
   // so the helix runs off both edges). Each letter also gets a random
@@ -65,13 +67,23 @@ if (journey && pin && canvas && canvas.getContext) {
   // real pixels make one CSS pixel (2 on Retina screens), so drawing at that
   // resolution keeps the letters sharp. Capped at 2 to save work.
   function resize() {
+    // The CSS decides whether the hero is pinned (it's "sticky" on laptops).
+    pinned = getComputedStyle(pin).position === 'sticky';
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
+    // Phones fire "resize" whenever the address bar slides in or out while
+    // scrolling. If the canvas didn't actually change size, do nothing,
+    // otherwise the helix would be rebuilt (and jump) during every scroll.
+    if (w === W && h === H) return;
+    const widthChanged = w !== W;
+    W = w;
+    H = h;
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = canvas.clientWidth;
-    H = canvas.clientHeight;
     canvas.width = Math.round(W * dpr);
     canvas.height = Math.round(H * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    build();
+    // New letters are only needed when the width changes (more or fewer pairs).
+    if (widthChanged) build();
     draw();
   }
 
@@ -193,14 +205,21 @@ if (journey && pin && canvas && canvas.getContext) {
     last = now;
     time += dt / 1000;
 
-    // Scroll journey: how far through the tall .journey box we are.
-    const scrollable = journey.offsetHeight - window.innerHeight;
-    const target = scrollable > 0 ? clamp(-journey.getBoundingClientRect().top / scrollable, 0, 1) : 0;
-    progress += (target - progress) * ease(dt, 210);
+    // Scroll journey, from 0 to 1.
+    const rect = journey.getBoundingClientRect();
+    let target;
+    if (pinned) {
+      // Pinned (laptops): how far through the tall .journey box we are.
+      const scrollable = journey.offsetHeight - window.innerHeight;
+      target = scrollable > 0 ? clamp(-rect.top / scrollable, 0, 1) : 0;
+    } else {
+      // Not pinned (phones): how much of the hero has scrolled off the top.
+      target = clamp(-rect.top / rect.height, 0, 1);
+    }
+    // A short ease (80ms) keeps up with the page, so it never feels sticky.
+    progress += (target - progress) * ease(dt, 80);
     tiltY += (mouseX * 0.35 - tiltY) * ease(dt, 300);
     tiltX += (mouseY * 0.25 - tiltX) * ease(dt, 300);
-    // The CSS uses --journey to drift and fade the hero text.
-    pin.style.setProperty('--journey', progress.toFixed(4));
 
     draw();
     if (visible) request();
@@ -218,9 +237,6 @@ if (journey && pin && canvas && canvas.getContext) {
     resize();
     window.addEventListener('resize', resize);
   } else {
-    // Switch on the pinned journey layout (see "DNA helix journey" in
-    // global.css), then size the canvas for it.
-    document.documentElement.classList.add('journey-ready');
     resize();
     window.addEventListener('resize', resize);
 

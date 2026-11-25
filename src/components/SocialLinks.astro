@@ -1,0 +1,49 @@
+---
+// SocialLinks.astro: the row of icon buttons for Instagram, LinkedIn, GitHub
+// and email, used in the hero and in the nav bar.
+// Each button shows just an icon. On hover (or keyboard focus) a small
+// bubble pops up with the icon and the name together.
+//
+// - place: "hero" (bubble pops up above) or "nav" (bubble pops down below,
+//          since the nav sits at the top of the screen). Default: hero
+import content from '../content.json';
+
+// "?raw" imports a file's text, so each SVG icon can go straight into the HTML.
+// Icons: Phosphor Icons (phosphoricons.com), MIT licence.
+import instagram from '../icons/instagram-logo.svg?raw';
+import linkedin from '../icons/linkedin-logo.svg?raw';
+import github from '../icons/github-logo.svg?raw';
+import email from '../icons/envelope-simple.svg?raw';
+
+const { place = 'hero' } = Astro.props;
+const { links, buttons } = content;
+const items = [
+	{ label: buttons.instagram, href: links.instagram, icon: instagram },
+	{ label: buttons.linkedin, href: links.linkedin, icon: linkedin },
+	{ label: buttons.github, href: links.github, icon: github },
+	// The email address is never written into the HTML (spam bots scan for
+	// it). This link goes to the contact card until src/scripts/email.js
+	// swaps in the real "mailto:" address when the page loads.
+	{ label: buttons.emailIcon, href: '#contact', icon: email, isEmail: true },
+];
+---
+
+<!--
+	A list (<ul>) of links. aria-label gives each icon-only link its name for
+	screen readers. The bubble repeats the name visually, so it's hidden from
+	screen readers (aria-hidden) to avoid reading the name twice.
+	set:html puts the SVG text in as real HTML instead of showing it as text.
+-->
+<ul class={`social social-${place}`}>
+	{items.map((item) => (
+		<li>
+			<a class="btn btn-outline social-link" href={item.href} aria-label={item.label} data-email={item.isEmail ? '' : undefined}>
+				<span class="icon" aria-hidden="true" set:html={item.icon} />
+				<span class="social-tip" aria-hidden="true">
+					<span class="icon" set:html={item.icon} />
+					{item.label}
+				</span>
+			</a>
+		</li>
+	))}
+</ul>

@@ -5,15 +5,15 @@
     "logo": "isaac.hii"
   },
   "links": {
+    "instagram": "https://www.instagram.com/isaachii_0830/",
     "linkedin": "https://www.linkedin.com/in/isaachiinh",
-    "github": "https://github.com/IsaacHiiii",
-    "cv": "#contact"
+    "github": "https://github.com/IsaacHiiii"
   },
   "buttons": {
+    "instagram": "Instagram",
     "github": "GitHub",
-    "getInTouch": "Get in touch",
-    "cv": "Download CV",
     "linkedin": "LinkedIn",
+    "emailIcon": "Email",
     "email": "Email me"
   },
   "nav": [
@@ -37,7 +37,7 @@
   "hero": {
     "prompt": "~/isaac-hii $ whoami",
     "name": "Isaac Hii Nian Hong",
-    "intro": "I'm a biomedical sciences student at NUMed, slowly teaching myself data science and joining hackathons when I can."
+    "intro": "I'm a biomedical sciences student, interested in computational biology and data science"
   },
   "about": {
     "heading": "A bit about me.",
@@ -50,10 +50,6 @@
       {
         "label": "currently",
         "value": "President, National Biomedical Science Gathering"
-      },
-      {
-        "label": "learning",
-        "value": "Python and R"
       },
       {
         "label": "off the clock",

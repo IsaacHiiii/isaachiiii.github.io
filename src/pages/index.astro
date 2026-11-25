@@ -23,6 +23,7 @@ import Button from '../components/Button.astro';
 import Heading from '../components/Heading.astro';
 import Card from '../components/Card.astro';
 import Entry from '../components/Entry.astro';
+import SocialLinks from '../components/SocialLinks.astro';
 
 // Pull each part out of content into its own short name.
 const { site, links, buttons, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
@@ -104,6 +105,10 @@ const atgcPatchStyle =
 			import '../scripts/scroll-reveal.js';
 			// Draws the DNA helix in the hero and runs the scroll journey.
 			import '../scripts/helix.js';
+			// Glides you through the opening fade so you never stop halfway.
+			import '../scripts/intro-snap.js';
+			// Puts the email address into the mail links (it's never in the HTML).
+			import '../scripts/email.js';
 		</script>
 
 		<!-- ===== Navigation bar ===== -->
@@ -118,21 +123,21 @@ const atgcPatchStyle =
 					{nav.map((item) => (
 						<a href={item.href} class="nav-link">{item.label}</a>
 					))}
-					<!-- Buttons come from src/components/Button.astro. -->
-					<Button href={links.github} variant="outline">{buttons.github}</Button>
-					<Button href="#contact">{buttons.getInTouch}</Button>
+					<!-- Instagram, LinkedIn, GitHub and email icons (src/components/SocialLinks.astro). -->
+					<SocialLinks place="nav" />
 				</nav>
 			</div>
 		</header>
 
 		<!--
 			===== Hero =====
-			.journey is a tall box you scroll through (only when the animation is
-			on). .journey-pin stays stuck to the screen meanwhile, so the hero and
-			its DNA helix stay in view while the helix untwists and dissolves.
-			The helix is drawn on the <canvas> by src/scripts/helix.js. A canvas
-			is a blank drawing surface for scripts. It's decoration, so
-			aria-hidden hides it from screen readers.
+			.journey is the box you scroll through. .journey-pin holds the hero
+			and the <canvas> behind it, where src/scripts/helix.js draws the DNA
+			helix. A canvas is a blank drawing surface for scripts. It's
+			decoration, so aria-hidden hides it from screen readers.
+			On laptops .journey is extra tall and .journey-pin stays stuck to the
+			screen while the hero fades and the helix dissolves (see section 12
+			in global.css). On phones the hero just scrolls normally.
 			id="top" is on the outer box so the logo link goes to the very start.
 		-->
 		<div class="journey" id="top">
@@ -156,9 +161,8 @@ const atgcPatchStyle =
 					</h1>
 					<p class="hero-intro">{hero.intro}</p>
 					<div class="button-row">
-						<!-- The CV link points to #contact until the PDF is added in Phase 5. -->
-						<Button href={links.cv}>{buttons.cv}</Button>
-						<Button href={links.linkedin} variant="outline">{buttons.linkedin}</Button>
+						<!-- Instagram, LinkedIn, GitHub and email icons (src/components/SocialLinks.astro). -->
+						<SocialLinks />
 					</div>
 				</div>
 			</section>
@@ -255,7 +259,7 @@ const atgcPatchStyle =
 				<Heading id="contact-h" heading={contact.heading} subheading={contact.subheading} />
 				<p class="contact-text">{contact.text}</p>
 				<div class="button-row">
-					<!-- Phase 5 adds the script that fills in the hidden email address. -->
+					<!-- src/scripts/email.js fills in the real email address when the page loads. -->
 					<Button href="#contact" id="email-button">{buttons.email}</Button>
 					<Button href={links.linkedin} variant="outline">{buttons.linkedin}</Button>
 				</div>

@@ -10,7 +10,10 @@ const hasMouse = window.matchMedia('(hover: hover) and (pointer: fine)').matches
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 if (hasMouse && !reduceMotion) {
-  const root = document.documentElement; // the <html> element, where --mx and --my live
+  // --mx and --my live on the background layer itself, not on <html>.
+  // Changing a value on <html> makes the browser re-check the styles of
+  // every element on the page; on .atgc it only re-checks the background.
+  const root = document.querySelector('.atgc');
   let x = 0;
   let y = 0;
   let queued = false; // is an update already waiting for the next frame?

@@ -36,19 +36,19 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 
 | Who | Why they visit | What they need to find quickly |
 | --- | --- | --- |
-| Researchers and supervisors | Deciding whether to take me on for a project | Research interests, skills, CV |
+| Researchers and supervisors | Deciding whether to take me on for a project | Research interests, skills |
 | Placement coordinators and recruiters | Checking my background | Experience, education, contact |
 | Peers and collaborators (e.g. NBSG partners) | Seeing what I'm involved in | Current roles, how to reach me |
 | Me | Learning to build with an agent | A codebase small enough to fully understand |
 
 ## 4. Pages and content
 
-**One page**, with the sections in the order below. This is the exact copy from the chosen mockup (option H, see section 6). All of it lives in `src/content.json` from Phase 1 onwards, never in the layout code, so I can reword anything later. Fuller details (grades, awards, older roles) stay in my CV, which the site links to.
+**One page**, with the sections in the order below. This is the exact copy from the chosen mockup (option H, see section 6). All of it lives in `src/content.json` from Phase 1 onwards, never in the layout code, so I can reword anything later. Fuller details (grades, awards, older roles) are left off the site.
 
 | Section | Exact content |
 | --- | --- |
-| Hero | Pill: `~/isaac-hii $ whoami` with a blinking cursor. Heading: **Isaac Hii Nian Hong** (no full stop, no tagline under it). Intro: "I'm a biomedical sciences student at NUMed, slowly teaching myself data science and joining hackathons when I can." Buttons: **Download CV** (white) and **LinkedIn** (outline), plain text, no icons |
-| A bit about me | Heading: "A bit about me." Paragraph: "I'm in my second year of Biomedical Sciences at Newcastle University Medicine Malaysia, based in Johor Bahru. I enjoy lab work, and I've been getting curious about what happens to the data afterwards. That's what pulled me towards bioinformatics and data science." Then four facts, each a small mono label above a value: `studying` BSc Biomedical Sciences, NUMed · `currently` President, National Biomedical Science Gathering · `learning` Python and R · `off the clock` Volleyball and chess |
+| Hero | Pill: `~/isaac-hii $ whoami` with a blinking cursor. Heading: **Isaac Hii Nian Hong** (no full stop, no tagline under it). Intro: "I'm a biomedical sciences student, interested in computational biology and data science" Links: four square icon buttons for **Instagram**, **LinkedIn**, **GitHub** and **Email** (Phosphor icons, MIT licence). On hover or keyboard focus, a small bubble pops up with the icon and the name |
+| A bit about me | Heading: "A bit about me." Paragraph: "I'm in my second year of Biomedical Sciences at Newcastle University Medicine Malaysia, based in Johor Bahru. I enjoy lab work, and I've been getting curious about what happens to the data afterwards. That's what pulled me towards bioinformatics and data science." Then three facts, each a small mono label above a value: `studying` BSc Biomedical Sciences, NUMed · `currently` President, National Biomedical Science Gathering · `off the clock` Volleyball and chess |
 | Experience | Heading: "Experience." / grey: "What I've been doing so far." Four entries (mono date, title, detail), current roles first, then finished ones newest first (President, Vice President, Research Intern, Clinical Laboratory Intern): **Jun – Aug 2026**, Research Intern, Institute for Medical Research: "Bacteriology Unit. Bacterial identification, MALDI-TOF MS, 16S rRNA PCR, and sequence analysis with MEGA and CLC." **May – Jun 2026**, Clinical Laboratory Intern, Premier Integrated Labs: "Haematology, urinalysis, blood grouping, rapid diagnostics, automated analysers and QC." **Apr 2026 – now**, President, National Biomedical Science Gathering: "Working with a committee of 30+ students to organise a national event for biomedical science students." **Jul 2026 – now**, Vice President, NUMed Bioscience Society: "Previously Publicity and Event Officer." |
 | Research and skills | Heading: "Research and skills." Poster entry: mono label "Poster, Aug 2026", title "Hormonal changes during menopause and their effects on cognitive function", line "MAAFIM 6th International Conference". Then a terminal block: `~/isaac-hii $ cat skills.txt`, then `code` Python, R, MEGA, CLC Genomics Workbench, BLAST · `lab` PCR, gel electrophoresis, sequencing, MALDI-TOF MS, microscopy · `speak` English, Malay, Chinese |
 | Hackathons | Heading: "Hackathons." / grey: "Learning by building, with people from other fields." Entry 1: mono path `hackathons/diabetes-x_2026-11`, title "Diabetes X Hackathon, MIT Hacking Medicine Malaysia", text "My first hackathon. I worked with a team from different backgrounds to build and pitch an idea for diabetes care. \[WHAT WE BUILT, IN ONE LINE\]". Entry 2: mono path `hackathons/next` (dimmer), text "Hoping to join more. If you're forming a team for a health or bio hackathon, I'd be glad to hear from you." ("hear from you" links to Contact) |
@@ -56,7 +56,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 | Contact | Centred card. Heading: "Say hello." / grey: "I'd love to hear what you're working on." Text: "Whether it's a hackathon team, a research project or just a question, feel free to reach out." Buttons: **Email me** (white) and **LinkedIn** (outline) |
 | Footer | Left: "© 2026 Isaac Hii". Right, in mono, two lines: `>>> print("Hello, world!")  · 23 Nov 2026` (my first line of Python, as a quiet signature), then "Built while learning to code with AI." |
 
-**Links:** LinkedIn `https://www.linkedin.com/in/isaachiinh` · GitHub `https://github.com/IsaacHiiii`.
+**Links:** Instagram `https://www.instagram.com/isaachii_0830/` · LinkedIn `https://www.linkedin.com/in/isaachiinh` · GitHub `https://github.com/IsaacHiiii`.
 
 **Placeholders still to fill in:** what my team built at Diabetes X, the course or book for Python and for R, my next learning topic, my email address.
 
@@ -70,12 +70,11 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 **MVP (must have at launch)**
 
 - One page that works on phone, tablet and laptop (see the responsive rules in section 6)
-- Sticky floating navigation bar linking to each section, plus GitHub and Get in touch buttons
+- Floating navigation bar linking to each section, plus Instagram, LinkedIn, GitHub and Email icon buttons
 - Hero with the DNA helix and scroll journey, the ATGC background, background glitches and name glitch (spec in section 6)
 - Every animation switches off for visitors with "reduce motion" turned on
-- Links to email, LinkedIn and GitHub
-- **Email is hidden from scrapers.** The address is never written in the HTML. A small script puts it together from pieces when the page loads and sets the "Email me" button's `mailto:` link. Visitors without JavaScript still have the LinkedIn button.
-- **Public downloadable CV** as a PDF, with phone number and home address removed. Check the PDF's metadata (author, file properties) and remove anything private before uploading.
+- Links to Instagram, LinkedIn, GitHub and email as icon buttons in the hero and the nav
+- **Email is hidden from scrapers.** The address is never written in the HTML. `src/scripts/email.js` keeps it in two reversed pieces, joins them when the page loads, and sets the `mailto:` link on both mail icons and the "Email me" button. Without JavaScript, the mail links go to the contact card.
 - Basic SEO: page title, meta description, and a preview image for when the link is shared on WhatsApp or LinkedIn
 - Basic accessibility: readable contrast, visible keyboard focus, real links and buttons
 - **Screen readers:** the ATGC grid, the helix canvas and both glitch copies of the name are hidden with `aria-hidden="true"`, so the name is read once. Test with VoiceOver on Mac.
@@ -95,7 +94,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 **Principles**
 
 - Monochrome only: black, white and greys. No accent colour.
-- Calm and humble. The loud moments all live in the hero: the DNA helix and its scroll journey, and the name glitch. Everything below it stays quiet.
+- Calm and humble. The loud moments all live in the hero: the DNA helix and its opening scene, and the name glitch. Everything below it stays quiet.
 - Biohacker touches stay small: a terminal prompt, mono file paths, log and skills blocks.
 - Big two-tone headings: a white line, then a grey line.
 
@@ -129,8 +128,8 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 
 **Layout, top to bottom**
 
-1. **Navigation bar.** Sticky, 12px from the top, max width 1180px, rounded 16px, 1px `--border`, background `rgba(17,17,17,0.85)` with a 12px backdrop blur. Left: "isaac.hii" in bold. Right: grey links (Experience, Research, Hackathons, Learning), a **GitHub** outline button, and a white **Get in touch** button. Buttons are plain text, with no arrow icons. Every link and button is at least 44px tall.
-2. **Hero.** No frame or box: the hero sits directly on the page background, max width 1180px. Content centred: the prompt pill, the H1 (the name), the intro (max about 36rem wide), then the two buttons. Behind it, a DNA helix runs diagonally through the title (see Animations). With the animation on, the hero is pinned for a short scroll journey and the next section slides up over it; with reduce motion on, it's a normal hero with about 8rem padding above and 7.5rem below.
+1. **Navigation bar.** Sticky, 12px from the top, max width 1180px, rounded 16px, 1px `--border`, background `rgba(17,17,17,0.85)` with a 12px backdrop blur. Left: "isaac.hii" in bold. Right: grey links (Experience, Research, Hackathons, Learning) and the same Instagram, LinkedIn, GitHub and Email icon buttons as the hero (44px; on hover the bubble pops down, lined up with the button's right edge so it stays inside the nav). No "Get in touch" button. Every link and button is at least 44px tall.
+2. **Hero.** No frame or box: the hero sits directly on the page background, max width 1180px. Content centred: the prompt pill, the H1 (the name), the intro (max about 36rem wide), then the two buttons. Behind it, a DNA helix runs diagonally through the title (see Animations). On load it fills the screen (no nav) and fades away as you scroll (see Animations). With reduce motion on, or in browsers without scroll-driven animations, it's a normal hero below the nav with about 8rem padding above and 7.5rem below.
 3. **Sections.** One centred column with the same width as the nav bar (max 1180px, 1rem side padding), so the boxes line up with the nav bar's edges. 6rem between sections. Section headings are indented to line up with the text inside the boxes. On laptops, Experience entries and the poster put the date or label in a 10rem left column, beside the title and detail. Each section has a two-tone H2 and then a black card (1px `--border`, rounded 16px, padding 0.5rem by 2rem). Rows inside a card have 1.5rem padding above and below, separated by 1px `--divider` lines. Terminal blocks use Geist Mono, a header line with the prompt, then the lines at line height about 2.
 4. **Contact.** Centred card, rounded 24px, 4rem padding, two-tone heading, short text, two buttons.
 5. **Footer.** Small `--faint` text, left and right, wrapping on phones.
@@ -142,7 +141,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 - **Name glitch.** Every 6.5s (first at 1.2s), the first line of the H1 glitches for about 0.2s: two copies of the name (one white, one grey, each on black) show thin horizontal slices using `clip-path`, shifted between −7px and +6px over three quick steps, then disappear. Built with `::before` and `::after` using `content: attr(data-text)`. The copies must not be read by screen readers: the visible name is read once (e.g. the glitch layer is `aria-hidden="true"` and the real text stays in the H1).
 - **Cursor.** A block cursor in the prompt pill blinks every 1.1s: one character wide, a full character cell tall, one space after the text.
 - **DNA helix hero.** A 3D double helix of A/C/G/T base pairs (A–T, C–G), drawn on a `<canvas>` by `src/scripts/helix.js` with plain JavaScript (no library). It runs diagonally (about 18°) through the title: two backbone curves, faint rungs, letters bigger and brighter at the front, fading at the screen edges. It turns slowly, tilts towards the mouse with eased movement, and a click on empty hero space sends a pulse of light along the strands. It pauses when off screen. The canvas is `aria-hidden="true"`.
-- **Scroll journey.** The hero sits in a box 1.7 screens tall with a sticky, one-screen pinned layer. Scroll progress (0 to 1, eased) drives: the hero text drifting up and fading (gone by a third), the helix untwisting into a flat ladder and stretching (15–60%), then its lines vanishing and letters scattering into the background (55–100%). The page content overlaps the journey (70% of a screen on laptops, 55% on phones), so "A bit about me" starts sliding up over the scene at about 45%. Keyboard focus inside the hero always shows the hero text. With reduce motion on: a still helix, no pinning. Without JavaScript: the normal hero.
+- **Opening scene and scroll journey.** On load the hero fills the screen with no nav. Scrolling fades it away: the hero text drifts up and fades, the helix untwists into a flat ladder (15–60%) then its lines vanish and its letters scatter into the background (55–100%), and the nav fades in at the end. On laptops (wider than 640px) the hero is pinned for 0.7 of a screen of scrolling (a 1.7-screen box with a sticky one-screen layer) and "A bit about me" slides up over it (the page content starts 70% of a screen early). On phones nothing is pinned: the hero scrolls away 1:1 with the finger while it fades. The text and nav fades are CSS scroll-driven animations (`animation-timeline: scroll(root)`), so they move exactly with the scroll; the timeline is set in a separate, more specific rule because the CSS minifier otherwise merges it into the `animation` shorthand, which browsers reject. Keyboard focus in the nav or hero always shows it. You can't stop halfway through the fade: when scrolling stops partway, `src/scripts/intro-snap.js` glides on (over 1.2s, easing in and out) until the "A bit about me" heading sits 22% of the way down the screen if you were scrolling down, or back to the top if you were scrolling up (it acts only inside the fade; the rest of the page scrolls freely). Browsers without scroll-driven animations, and reduce motion, get the normal hero and nav (reduce motion: a still helix).
 - **Cursor reveal.** On devices with a mouse, the ATGC letters show in a soft 180px circle around the pointer, added to the background's masks. Updates at most once per frame.
 - **Scroll reveals.** Each section below the hero fades in and slides 32px into place every time it scrolls into view (`IntersectionObserver`, 15% visible), rising when scrolling down and sliding down when scrolling back up. It hides again only once fully off screen.
 - **Button states.** Hover (mouse only): lift 1px, solid buttons go pure white, outline buttons get a lighter border and `#181818` background. Press: scale to 98%. All transitions 300ms on `cubic-bezier(0.22, 1, 0.36, 1)`. With reduce motion on, colours still change but nothing moves.
@@ -150,7 +149,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 **Responsive rules**
 
 - Nothing scrolls sideways at 375px wide, including the terminal blocks: long lines wrap under their own value, with the labels kept in a column.
-- On phones (640px and narrower) the nav stays on one row: the four section links are hidden, and the logo, GitHub and Get in touch stay. No menu button.
+- On phones (640px and narrower) the nav stays on one row: the four section links are hidden, and the logo and the four icon buttons stay (fits from 360px wide). No menu button.
 - Inside entries, the date and title stack on narrow screens.
 - Buttons wrap and stay at least 44px tall.
 
@@ -185,7 +184,7 @@ Because of the second job, this PRD is written so I can hand it straight to a co
 3. **Phase 2: Animations.** Generate the ATGC grid at build time, then add the background glitches, the name glitch and the cursor exactly as specified, and make sure they turn off with reduce motion. *Learning goal:* CSS animations, a small script, accessibility settings. *Starter prompt:* "Implement the Animations part of section 6, one effect at a time. After each one, tell me how to test it, including with reduce motion turned on and with VoiceOver."
 4. **Phase 3: Components.** Turn repeated parts (cards, entries, buttons, two-tone headings) into components. *Learning goal:* components. *Starter prompt:* "Build reusable components for the repeated parts of the page. The page should look exactly the same afterwards."
 5. **Phase 4: Check the live site.** Deploys have been running since Phase 0. Open the live URL on my phone and laptop and check that the latest push is live and everything works there, not just on the dev server. *Learning goal:* the difference between the dev server and the live build.
-6. **Phase 5: Polish.** Phone layout, SEO tags, preview image, CV download, hidden email script, keyboard and contrast check, a Lighthouse audit, and filling in or removing the placeholders. *Learning goal:* testing and auditing the agent's work.
+6. **Phase 5: Polish.** Phone layout, SEO tags, preview image, hidden email script, keyboard and contrast check, a Lighthouse audit, and filling in or removing the placeholders. *Learning goal:* testing and auditing the agent's work.
 7. **Phase 6: Stretch.** Pick from the stretch list in section 5.
 
 ## 9. Done criteria

@@ -106,8 +106,10 @@ body {
    A soft circle around the mouse where the letters show through.
    src/scripts/cursor-reveal.js sets --mx and --my to the mouse position.
    They start far off screen, so there's no circle until the mouse moves
-   (and never on phones, or with reduce motion on, where the script doesn't run). */
-:root {
+   (and never on phones, or with reduce motion on, where the script doesn't run).
+   They're set on .atgc (not the whole page) so a mouse move only makes the
+   browser update the background, not every element. */
+.atgc {
   --mx: -1000px;
   --my: -1000px;
   /* Solid in the middle, half visible at 90px, gone at 180px from the mouse. */
@@ -446,6 +448,7 @@ a:focus-visible {
   line-height: 1.65;
   color: var(--text-2);
   max-width: 36rem;
+  text-wrap: balance; /* even line lengths, so phrases aren't split awkwardly */
 }
 .button-row {
   display: flex;
@@ -643,7 +646,7 @@ a:focus-visible {
    so everything inside here changes the phone layout and leaves laptops alone. */
 @media (max-width: 640px) {
   /* Keep the nav on one row: hide the four section links,
-     keep the logo, GitHub and Get in touch. */
+     keep the logo and the four icon links. */
   .nav-bar {
     flex-wrap: nowrap;
     padding: 0.5rem 0.5rem 0.5rem 1rem;
@@ -840,8 +843,9 @@ a:focus-visible {
   }
 }
 
-/* ---------- 11. DNA helix journey ----------
-   The hero's canvas, where src/scripts/helix.js draws the DNA helix. */
+/* ---------- 11. DNA helix ----------
+   The hero's canvas, where src/scripts/helix.js draws the DNA helix. It
+   fills the hero, behind the text. */
 .journey-pin {
   position: relative; /* so the canvas can fill it */
 }
@@ -850,66 +854,225 @@ a:focus-visible {
   inset: 0;
   width: 100%;
   height: 100%;
-  pointer-events: none; /* clicks go to the page; the script listens on the pin */
+  pointer-events: none; /* clicks go to the page; the script listens on the hero */
 }
 
-/* The scroll journey, only once the script has added "journey-ready" to
-   the page (never with reduce motion on, or JavaScript off).
-   .journey becomes 1.7 screens tall. .journey-pin is one screen tall and
-   "sticky", so it stays stuck to the top of the window while you scroll
-   through the extra 0.7 of a screen. (Bigger = a longer, slower journey.) svh = "small viewport height", which on
-   phones ignores the address bar. */
-.journey-ready .journey {
-  height: 170vh;
+/* ---------- 12. Opening scene and fade ----------
+   On load: a full-screen hero with no nav. As you scroll, the hero text
+   drifts up and fades, the helix untwists and dissolves (helix.js), and
+   the nav fades in.
+   On laptops the hero is pinned while this happens, and "A bit about me"
+   slides up over it. On phones the hero simply scrolls away (pinning felt
+   sticky with a finger).
+
+   The fades are "scroll-driven animations": animation-timeline: scroll(root)
+   ties an animation to the scroll position instead of to time. The browser
+   runs it together with the scrolling itself, so it never lags behind.
+   animation-range says which stretch of scrolling it covers.
+
+   Only in browsers that support this (@supports), and never with reduce
+   motion on. Everywhere else the page keeps its normal hero and nav. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    /* The nav floats over the page instead of taking space above the hero,
+       so the opening scene fills the whole screen. It fades in as you scroll. */
+    .nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      margin-top: 0;
+      animation: nav-in linear both;
+    }
+    /* The opening scene: one full screen, content centred. */
+    .journey-pin {
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+    }
+    .journey-pin .hero-wrap {
+      width: 100%;
+    }
+    .journey-pin .hero-content {
+      padding-top: 2rem;
+      padding-bottom: 2rem;
+      animation: hero-out linear both;
+    }
+
+    /* The scroll timelines are set in separate rules on purpose. The build's
+       CSS minifier otherwise squeezes animation-timeline into the
+       "animation" shorthand, which browsers reject, so the animations were
+       silently dropped. "html ..." is slightly more specific, so these win
+       over the shorthand above (which would reset them). */
+    html .nav {
+      animation-timeline: scroll(root);
+      animation-range: 0 60svh;
+    }
+    html .journey-pin .hero-content {
+      animation-timeline: scroll(root);
+      animation-range: 0 50svh;
+    }
+
+    /* Keyboard users who tab into the nav or hero always see it.
+       (!important is needed to win over a running animation.) */
+    .nav:focus-within,
+    .journey-pin .hero-content:focus-within {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+
+    /* Laptops: pin the hero. .journey is 1.7 screens tall and .journey-pin
+       stays stuck to the screen ("sticky") for the extra 0.7 of a screen.
+       The text fades in the first quarter of a screen, and the nav arrives
+       by the end. */
+    @media (min-width: 641px) {
+      .journey {
+        height: 170vh;
+      }
+      .journey-pin {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        overflow: hidden; /* scattered letters past the edges are cut off */
+      }
+      html .journey-pin .hero-content {
+        animation-range: 0 25svh;
+      }
+      html .nav {
+        animation-range: 0 70svh;
+      }
+      /* "A bit about me" starts 70% of a screen early, so it slides up over
+         the pinned scene as the letters scatter. position + z-index draw it
+         on top. */
+      .main {
+        position: relative;
+        z-index: 1;
+        margin-top: -70vh;
+      }
+    }
+  }
 }
-.journey-ready .journey-pin {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  height: 100svh;
+@keyframes nav-in {
+  0%,
+  80% {
+    opacity: 0;
+    visibility: hidden; /* hidden = can't be clicked or tabbed to */
+  }
+  100% {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@keyframes hero-out {
+  to {
+    opacity: 0;
+    transform: translateY(-10vh);
+  }
+}
+
+/* ---------- 13. Social links ----------
+   The Instagram / LinkedIn / GitHub icon buttons in the hero and the nav
+   (src/components/SocialLinks.astro). Each is a square outline button with
+   an icon. On hover or keyboard focus, a small bubble pops up with the icon
+   and the name together. */
+.social {
+  display: flex;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none; /* no bullet points */
+}
+.social-link {
+  position: relative; /* the bubble is placed relative to its button */
+  width: 48px;
+  padding: 0;
+  justify-content: center;
+}
+/* In the nav: 44px squares with no side padding (the nav's button padding
+   would otherwise squeeze the icon). */
+.nav .social-link {
+  width: 44px;
+  padding: 0;
+}
+.social .icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+}
+.social .icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* The bubble: invisible and slightly lower until hovered, then it fades in
+   and rises into place. It only moves with transform and opacity, which are
+   cheap for the browser to animate. */
+.social-tip {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px); /* just above the button */
   display: flex;
   align-items: center;
-  overflow: hidden; /* scattered letters past the edges are cut off */
+  gap: 0.4rem;
+  padding: 0.4rem 0.75rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap; /* keep the name on one line */
+  pointer-events: none; /* the bubble can't block the mouse */
+  opacity: 0;
+  transform: translate(-50%, 6px) scale(0.96);
+  transition:
+    opacity 200ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-.journey-ready .hero-wrap {
-  width: 100%;
+.social-tip .icon {
+  width: 16px;
+  height: 16px;
 }
-/* The hero text sits centred in the screen (with room for the nav at the
-   top). As --journey goes from 0 to 1 it drifts up and has faded out by
-   a third of the way. var(--journey, 0) = "--journey, or 0 if not set". */
-.journey-ready .hero-content {
-  padding-top: 5rem;
-  padding-bottom: 2rem;
-  opacity: calc(1 - var(--journey, 0) * 3);
-  transform: translateY(calc(var(--journey, 0) * -30vh));
-}
-/* The nav floats over the pinned hero instead of taking up space above it,
-   so the hero is centred in the whole screen (it already leaves room for
-   the nav at the top). "fixed" pins it to the window, like sticky did. */
-.journey-ready .nav {
-  position: fixed;
-  left: 0;
+/* In the nav, the bubble pops down instead (the nav is at the top), and
+   lines up with its button's right edge, so the last one (email, at the
+   far right) can't stick out past the side of the nav. */
+.social-nav .social-tip {
+  bottom: auto;
+  top: calc(100% + 10px);
+  left: auto;
   right: 0;
-  margin-top: 0;
+  transform: translateY(-6px) scale(0.96);
+  transform-origin: top right;
 }
-/* Keyboard users tabbing into the hero always see what has focus. */
-.journey-ready .hero-content:focus-within {
+/* Show it: on hover (only with a mouse, so a tap on a phone doesn't leave
+   it stuck open), and on keyboard focus. */
+@media (hover: hover) {
+  .social-link:hover .social-tip {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+  .social-nav .social-link:hover .social-tip {
+    transform: none;
+  }
+}
+.social-link:focus-visible .social-tip {
   opacity: 1;
+  transform: translate(-50%, 0) scale(1);
+}
+.social-nav .social-link:focus-visible .social-tip {
   transform: none;
 }
-/* The rest of the page starts while the journey is still running, so
-   "A bit about me" slides up over the scene as the letters scatter,
-   instead of arriving after a screen of empty space. The negative margin
-   pulls it 70% of a screen higher (55% on phones, which have less space
-   above the section), so it starts arriving about halfway through.
-   position + z-index draw it on top of the pinned scene. */
-.journey-ready .main {
-  position: relative;
-  z-index: 1;
-  margin-top: -70vh;
-}
-@media (max-width: 640px) {
-  .journey-ready .main {
-    margin-top: -55vh;
+/* Reduce motion: the bubble just fades, without moving. */
+@media (prefers-reduced-motion: reduce) {
+  .social-tip,
+  .social-nav .social-tip,
+  .social-link:hover .social-tip,
+  .social-link:focus-visible .social-tip {
+    transform: translate(-50%, 0);
+  }
+  .social-nav .social-tip,
+  .social-nav .social-link:hover .social-tip,
+  .social-nav .social-link:focus-visible .social-tip {
+    transform: none;
   }
 }
