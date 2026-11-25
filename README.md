@@ -38,12 +38,20 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 - **What looks right on screen isn't always what a screen reader hears.** The glitch copies of my name are hidden from screen readers, so VoiceOver reads my name once, not three times.
 - **The dev server isn't the live site.** One animation worked in development but was silently removed when the site was built for production. Testing the real build caught it before it went live.
 
+### Phase 3: components
+
+- **Pulling something out makes it easier to judge.** Once the button was a single component, the arrow icons stood out, and I saw they didn't fit the calm look. I removed them everywhere with one change.
+- **Not everything needs to be a component.** The heading with my name and the one-off rows stayed as plain HTML. A component only helps where the same pattern really repeats.
+- **A rule only works if it has no exceptions.** The button labels were still written in the layout code, which went against my rule that all wording lives in one file. Moving them changed nothing on screen, but it means I always know where to look.
+- **"It looks the same" can be proven.** After each change I compared the built page with the version before it. Matching HTML was stronger evidence than looking at it by eye.
+
 ## How it's built
 
 - [Astro](https://astro.build) builds the site into plain HTML
 - Plain CSS in one stylesheet, `src/styles/global.css`, with the colours set once as design tokens. A separate set of rules handles phones
 - Geist and Geist Mono fonts, bundled with the site rather than loaded from Google
 - All the text lives in one file, `src/content.json`, so I can edit it without touching the layout
+- The parts that repeat are components in `src/components/`: `Button`, `Heading` (the two-tone section headings), `Card` (the black boxes) and `Entry` (a label, a title and a detail). The page itself, `src/pages/index.astro`, puts them together
 - Animations:
   - The background of A, C, G and T letters, shown in random patches, is generated when the site is built.
   - The name glitch and the blinking cursor are plain CSS.

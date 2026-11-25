@@ -1,0 +1,19 @@
+---
+// Entry.astro: one row inside a card, with a small mono label (a date or
+// path), a title, and a line of detail. Used for Experience, the poster,
+// and Hackathons.
+//
+// - label, title, detail: the three pieces of text
+// - as:     which HTML tag to use. Default "div". Experience uses "li",
+//           because each role is an item in a list
+// - beside: true puts the label in a column beside the title and detail on
+//           laptops (the "entry" class in global.css). Default: label on top
+const { label, title, detail, as: Tag = 'div', beside = false } = Astro.props;
+---
+
+<!-- { entry: beside } adds the class "entry" only when beside is true. -->
+<Tag class:list={['row', { entry: beside }]}>
+	<p class="mono-label">{label}</p>
+	<h3 class="entry-title">{title}</h3>
+	<p class="entry-detail">{detail}</p>
+</Tag>

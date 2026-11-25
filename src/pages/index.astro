@@ -21,6 +21,8 @@ import content from '../content.json';
 // Components: reusable pieces of the page, each in its own file in src/components/.
 import Button from '../components/Button.astro';
 import Heading from '../components/Heading.astro';
+import Card from '../components/Card.astro';
+import Entry from '../components/Entry.astro';
 
 // Pull each part out of content into its own short name.
 const { site, links, buttons, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
@@ -150,7 +152,7 @@ const atgcPatchStyle =
 			<!-- aria-labelledby links the section to its heading, so screen readers can name it. -->
 			<section class="section" aria-labelledby="about-h">
 				<Heading id="about-h" heading={about.heading} />
-				<div class="card">
+				<Card>
 					<!-- One row: the paragraph, then the facts underneath it. -->
 					<div class="row about-row">
 						<p class="about-text">{about.paragraph}</p>
@@ -164,52 +166,40 @@ const atgcPatchStyle =
 							))}
 						</dl>
 					</div>
-				</div>
+				</Card>
 			</section>
 
 			<!-- ===== Experience ===== -->
 			<section id="experience" class="section" aria-labelledby="exp-h">
 				<Heading id="exp-h" heading={experience.heading} subheading={experience.subheading} />
-				<!-- <ol> is an ordered list, one <li> per role. -->
-				<ol class="card">
+				<!-- The card is an ordered list (<ol>), with one list item (<li>) per role. -->
+				<Card as="ol">
 					{experience.entries.map((entry) => (
-						<li class="row entry">
-							<p class="mono-label">{entry.when}</p>
-							<h3 class="entry-title">{entry.title}</h3>
-							<p class="entry-detail">{entry.detail}</p>
-						</li>
+						<Entry as="li" beside label={entry.when} title={entry.title} detail={entry.detail} />
 					))}
-				</ol>
+				</Card>
 			</section>
 
 			<!-- ===== Research and skills ===== -->
 			<section id="research" class="section" aria-labelledby="res-h">
 				<Heading id="res-h" heading={research.heading} />
-				<div class="card">
-					<div class="row entry">
-						<p class="mono-label">{research.poster.label}</p>
-						<h3 class="entry-title">{research.poster.title}</h3>
-						<p class="entry-detail">{research.poster.venue}</p>
-					</div>
+				<Card>
+					<Entry beside label={research.poster.label} title={research.poster.title} detail={research.poster.venue} />
 					<div class="row terminal">
 						<p class="mono-label">{research.skillsPrompt}</p>
 						{research.skills.map((skill) => (
 							<p class="term-line"><span class="key">{skill.label}</span><span>{skill.value}</span></p>
 						))}
 					</div>
-				</div>
+				</Card>
 			</section>
 
 			<!-- ===== Hackathons ===== -->
 			<section id="hackathons" class="section" aria-labelledby="hack-h">
 				<Heading id="hack-h" heading={hackathons.heading} subheading={hackathons.subheading} />
-				<div class="card">
+				<Card>
 					{hackathons.entries.map((entry) => (
-						<div class="row">
-							<p class="mono-label">{entry.path}</p>
-							<h3 class="entry-title">{entry.title}</h3>
-							<p class="entry-detail">{entry.text}</p>
-						</div>
+						<Entry label={entry.path} title={entry.title} detail={entry.text} />
 					))}
 					<!-- The "next" row is dimmer, and "hear from you" links to the contact card. -->
 					<div class="row">
@@ -218,13 +208,13 @@ const atgcPatchStyle =
 							{hackathons.next.textBefore}<a href="#contact">{hackathons.next.linkText}</a>{hackathons.next.textAfter}
 						</p>
 					</div>
-				</div>
+				</Card>
 			</section>
 
 			<!-- ===== Learning data science ===== -->
 			<section id="learning" class="section" aria-labelledby="learn-h">
 				<Heading id="learn-h" heading={learning.heading} subheading={learning.subheading} />
-				<div class="card log">
+				<Card class="log">
 					<p class="mono-label log-header">{learning.prompt}</p>
 					<div class="terminal">
 						<!--
@@ -237,7 +227,7 @@ const atgcPatchStyle =
 							</p>
 						))}
 					</div>
-				</div>
+				</Card>
 			</section>
 
 			<!-- ===== Contact ===== -->

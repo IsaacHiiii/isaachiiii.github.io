@@ -1,0 +1,17 @@
+---
+// Card.astro: the black box each section's content sits in.
+// Whatever you put between <Card> and </Card> goes inside it.
+//
+// - as:    which HTML tag to use. Default "div". Experience uses "ol",
+//          because its card is an ordered list of roles.
+// - class: optional extra class, e.g. "log" for the learning log's own padding
+//
+// "as: Tag" renames the prop to Tag. A capitalised variable can be used as a
+// tag name in Astro, so <Tag> becomes <div> or <ol>.
+const { as: Tag = 'div', class: extra } = Astro.props;
+---
+
+<!-- class:list joins the classes and skips empty ones: "card" or "card log". -->
+<Tag class:list={['card', extra]}>
+	<slot />
+</Tag>
