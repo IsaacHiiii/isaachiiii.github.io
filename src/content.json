@@ -26,6 +26,10 @@
       "href": "#research"
     },
     {
+      "label": "Projects",
+      "href": "#projects"
+    },
+    {
       "label": "Hackathons",
       "href": "#hackathons"
     },
@@ -105,6 +109,12 @@
         "value": "English, Malay, Chinese"
       }
     ]
+  },
+  "projects": {
+    "heading": "Projects.",
+    "subheading": "Things I've built with code.",
+    "linkText": "View the code",
+    "entries": []
   },
   "hackathons": {
     "heading": "Hackathons.",

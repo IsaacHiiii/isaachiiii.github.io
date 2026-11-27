@@ -1,13 +1,15 @@
 ---
 // Entry.astro: one row inside a card, with a small mono label (a date or
 // path), a title, and a line of detail. Used for Experience, the poster,
-// and Hackathons.
+// Hackathons and Projects.
 //
 // - label, title, detail: the three pieces of text
 // - as:     which HTML tag to use. Default "div". Experience uses "li",
 //           because each role is an item in a list
 // - beside: true puts the label in a column beside the title and detail on
 //           laptops (the "entry" class in global.css). Default: label on top
+// Anything put between <Entry> and </Entry> goes in the <slot /> under the
+// detail. Projects use it for their tools line and code link.
 const { label, title, detail, as: Tag = 'div', beside = false } = Astro.props;
 ---
 
@@ -16,4 +18,5 @@ const { label, title, detail, as: Tag = 'div', beside = false } = Astro.props;
 	<p class="mono-label">{label}</p>
 	<h3 class="entry-title">{title}</h3>
 	<p class="entry-detail">{detail}</p>
+	<slot />
 </Tag>

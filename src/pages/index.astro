@@ -32,7 +32,13 @@ import Entry from '../components/Entry.astro';
 import SocialLinks from '../components/SocialLinks.astro';
 
 // Pull each part out of content into its own short name.
-const { site, links, buttons, nav, hero, about, experience, research, hackathons, learning, contact, footer } = content;
+const { site, links, buttons, hero, about, experience, research, projects, hackathons, learning, contact, footer } = content;
+
+// The Projects section only appears once content.json lists at least one
+// project. Until then, its nav link is left out too, so it never points to
+// a section that isn't there.
+const hasProjects = projects.entries.length > 0;
+const nav = content.nav.filter((item) => item.href !== '#projects' || hasProjects);
 
 // ATGC background: build the grid of random DNA letters once, at build time.
 // Because this runs in the frontmatter, the letters are already written into
@@ -244,6 +250,28 @@ const atgcPatchStyle =
 					</div>
 				</Card>
 			</section>
+
+			<!--
+				===== Projects =====
+				{hasProjects && (...)} means "only build this section if there is at
+				least one project". Each project is one row: a mono path, the title,
+				a line about it, then (only if filled in) the tools and a code link.
+			-->
+			{hasProjects && (
+				<section id="projects" class="section" aria-labelledby="proj-h">
+					<Heading id="proj-h" heading={projects.heading} subheading={projects.subheading} />
+					<Card as="ul">
+						{projects.entries.map((project) => (
+							<Entry as="li" label={project.path} title={project.title} detail={project.text}>
+								{project.tools && <p class="mono-label">{project.tools}</p>}
+								{project.link && (
+									<p class="entry-detail"><a href={project.link}>{projects.linkText}</a></p>
+								)}
+							</Entry>
+						))}
+					</Card>
+				</section>
+			)}
 
 			<!-- ===== Hackathons ===== -->
 			<section id="hackathons" class="section" aria-labelledby="hack-h">
