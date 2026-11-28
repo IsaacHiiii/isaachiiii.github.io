@@ -111,7 +111,7 @@ The full plan is in [docs/PRD.md](docs/PRD.md).
 
 ## Running it locally
 
-You need [Node.js](https://nodejs.org) installed.
+You need [Node.js](https://nodejs.org) 22.23.4 or newer installed (the version is set in `package.json`).
 
 ```sh
 npm install      # install the tools, once
